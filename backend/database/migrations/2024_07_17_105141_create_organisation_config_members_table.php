@@ -34,7 +34,7 @@ return new class extends Migration
             $table->boolean('does_membership_numbers_auto_increment')->default(true);
             $table->boolean('can_member_sign_declaration_for_other_adult_members')->default(false);
             $table->boolean('prompt_admin_to_remove_inactive_members')->default(true);
-            $table->unsignedTinyInteger('max_days_inactive')->default(365);
+            $table->unsignedInteger('max_days_inactive')->default(365);
             $table->timestamps();
         });
     }

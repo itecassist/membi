@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('visible_to_non_members')->default(true);
             $table->boolean('published')->default(true);
-            $table->enum('members_only', ['yes', 'no', 'waiting_list'])->default(true);
-            $table->enum('renewable', ['fixed_end_date', 'individual_anniversary', 'non_renewable'])->default(true);
+            $table->enum('members_only', ['yes', 'no', 'waiting_list'])->default('no');
+            $table->enum('renewable', ['fixed_end_date', 'individual_anniversary', 'non_renewable'])->default('non_renewable');
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
             $table->softDeletes();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('apply_to_all_subscription_fees');
             $table->boolean('payment_method');
             $table->integer('order_expiry_days');
-            $table->enum('should_have_form', ['np', 'select_existing', 'create_new'])->default('no');
+            $table->enum('should_have_form', ['no', 'select_existing', 'create_new'])->default('no');
             $table->unsignedBigInteger('virtual_form_id')->nullable();
             $table->string('message');
             $table->timestamps();
