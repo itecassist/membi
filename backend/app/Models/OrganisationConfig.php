@@ -10,7 +10,7 @@ class OrganisationConfig extends Model
     use HasFactory;
 
     protected $fillable = [
-        'organisation_id',
+        'organization_id',
         'primary_color',
         'secondary_color',
         'button_color',
