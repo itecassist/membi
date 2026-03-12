@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_configs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->string('primary_color', 7)->default('#000000');
             $table->string('secondary_color', 7)->default('#000000');
             $table->string('button_color', 7)->default('#000000');
-            $table->foreignId('tax_rate_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('tax_rate_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('admins_require_2fa')->default(false);
-            $table->unsignedTinyInteger('max_days_between_2fa');
+            $table->unsignedTinyInteger('max_days_between_2fa')->default(30);
             $table->string('social_facebook')->nullable();
             $table->string('social_twitter')->nullable();
             $table->string('social_instagram')->nullable();
@@ -27,8 +27,7 @@ return new class extends Migration
             $table->string('banner')->nullable();
             $table->text('introduction')->nullable();
             $table->text('about')->nullable();
-            $table->boolean('show_subscription_button')->default(false); // could be private
-            // $table->boolean('show_contact_detail')->default(false);
+            $table->boolean('show_subscription_button')->default(false);
             $table->boolean('show_events')->default(false);
             $table->boolean('show_new_members')->default(false);
             $table->timestamps();

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('group_id')->nullable();
             $table->string('file');
             $table->unsignedTinyInteger('sort_order')->default(0);

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_config_financials', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->char('currency', 1);
             $table->boolean('vat_status')->default(true);
             $table->string('vat_number');

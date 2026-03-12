@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('faq_tags', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('faq_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('faq_id')->constrained()->cascadeOnDelete();
             $table->string('tag')->unique();
             $table->string('image')->nullable();
             $table->string('link')->nullable();

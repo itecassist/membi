@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_event_rules', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('visible_to_non_members')->default(true);
             $table->boolean('published')->default(true);
             $table->enum('members_only', ['yes', 'no', 'waiting_list'])->default('no');

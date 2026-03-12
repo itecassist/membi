@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_option_rules', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('model')->comment('Table to be checked');
             $table->string('field')->comment('Field to be checked');
             $table->string('operator')->comment('Operator to be used');

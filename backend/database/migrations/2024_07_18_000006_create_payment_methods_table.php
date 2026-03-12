@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('type');
+            $table->string('name');
             $table->text('explanation');
             $table->boolean('is_active')->default(true);
-            $table->boolean('default')->default(true);
-            $table->boolean('details')->default(true);
+            $table->boolean('is_default')->default(false);
             $table->decimal('surcharge_percentage', 5, 2)->default(0);
             $table->decimal('surcharge_fixed', 10, 2)->default(0);
-            $table->foreignId('accounting_code_id')->constrained();
+            $table->foreignUuid('accounting_code_id')->nullable()->constrained()->nullOnDelete();
             $table->text('checkout_text')->nullable();
             $table->text('success_text')->nullable();
             $table->timestamps();

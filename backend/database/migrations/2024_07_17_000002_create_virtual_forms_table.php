@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('virtual_forms', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('category');
             $table->string('name');
             $table->timestamps();

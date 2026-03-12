@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_config_subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->boolean('can_member_have_more_than_one_subscription')->default(false);
             $table->boolean('can_have_subscription_without_membership')->default(false);
             $table->unsignedTinyInteger('recently_expired_annual_subscription_months')->default(1);

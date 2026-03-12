@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('virtual_fields', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('virtual_form_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('virtual_form_id')->constrained()->cascadeOnDelete();
             $table->string('field_name');
             $table->string('description')->nullable();
             $table->boolean('required')->default(false);

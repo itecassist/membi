@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lookups', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->unsignedInteger('organisation_id')->default(0);
             $table->string('name');
             $table->string('description')->nullable();

@@ -12,20 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('member_id')->nullable()->constrained();
-            $table->foreignId('organisation_id')->constrained();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('member_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('email');
-            $table->string('payment_method'); // when paypal/gocardless the status should change to payment_received/payment_problem
+            $table->foreignUuid('payment_method_id')->nullable()->constrained('payment_methods')->nullOnDelete();
             $table->string('payment_reference')->nullable();
-            $table->enum('order_status', ['order_placed', 'payment_received', 'payment_problem', 'cancelled', 'cancelled_before_payment', 'cancelled_pending_payment', 'cancelled_refund_scheduled', 'cancelled_refund_due', 'cancelled_not_refunded', 'cancelled_refunded', 'partially_cancelled', 'no_payment_required', 'completed', 'partial_payment', 'refunded', 'payment_transfer']);
-            $table->date('date_finished');
-            $table->string('comments')->nullable();
-            $table->char('currency_code', 3);
-            $table->decimal('currency_value', 14, 6)->nullable();
-            $table->decimal('tax_total', 14, 6);
-            $table->decimal('total', 14, 6);
+            $table->enum('status', [
+                'pending', 'payment_received', 'payment_problem',
+                'cancelled', 'no_payment_required', 'completed',
+                'partial_payment', 'refunded'
+            ])->default('pending');
+            $table->date('date_placed');
+            $table->date('date_finished')->nullable();
+            $table->text('comments')->nullable();
+            $table->char('currency_code', 3)->default('GBP');
+            $table->decimal('tax_total', 14, 6)->default(0);
+            $table->decimal('total', 14, 6)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

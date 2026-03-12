@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscription_price_option_new_members', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->uuid('subscription_price_option_id');
+            $table->foreign('subscription_price_option_id', 'spo_new_members_spo_id_fk')
+                  ->references('id')->on('subscription_price_options')->cascadeOnDelete();
             $table->boolean('enable_rollover')->default(false);
             $table->integer('rollover_period_days')->default(0);
             $table->boolean('enable_pro_rata_pricing')->default(false);
-            $table->decimal('pro_rata_pricing');
+            $table->decimal('pro_rata_pricing', 5, 2)->nullable();
             $table->timestamps();
         });
     }

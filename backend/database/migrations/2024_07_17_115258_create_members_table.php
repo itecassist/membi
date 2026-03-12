@@ -12,22 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('organisation_id')->constrained();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->string('title', 50)->nullable();
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('first_name', 50)->nullable();
+            $table->string('last_name', 50)->nullable();
             $table->string('email');
-            $table->string('mobile_phone', 30);
+            $table->string('mobile_phone', 30)->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->enum('gender', ['female', 'male', 'other']);
+            $table->enum('gender', ['female', 'male', 'other', 'prefer_not_to_say'])->nullable();
             $table->string('member_number', 30)->nullable();
-            $table->date('joined_at');
+            $table->string('classification')->nullable();
+            $table->date('joined_at')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->json('roles');
-            $table->dateTime('last_login_at');
+            $table->timestamp('last_login_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+            $table->unique(['user_id', 'organisation_id']);
         });
     }
 

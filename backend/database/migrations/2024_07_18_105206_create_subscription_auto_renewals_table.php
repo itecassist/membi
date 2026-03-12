@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscription_auto_renewals', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('subscription_id')->constrained()->cascadeOnDelete();
             $table->boolean('enable_auto_renewal')->default(false);
-            $table->boolean('apply_to_all_subscription_fees');
-            $table->boolean('payment_method');
-            $table->integer('order_expiry_days');
+            $table->boolean('apply_to_all_subscription_fees')->default(false);
+            $table->foreignUuid('payment_method_id')->nullable()->constrained('payment_methods')->nullOnDelete();
+            $table->integer('order_expiry_days')->default(7);
             $table->enum('should_have_form', ['no', 'select_existing', 'create_new'])->default('no');
-            $table->unsignedBigInteger('virtual_form_id')->nullable();
-            $table->string('message');
+            $table->uuid('virtual_form_id')->nullable();
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_option_variants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('product_option_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('lookup_id');
             $table->unsignedInteger('deductible')->default(1);
             $table->decimal('amount', 10, 2)->default(0);

@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscription_price_late_fees', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
-            $table->string('price_option');
-            $table->decimal('price', 8, 2);
+            $table->uuid('id')->primary();
+            $table->uuid('subscription_price_option_id');
+            $table->foreign('subscription_price_option_id', 'spo_late_fees_spo_id_fk')
+                  ->references('id')->on('subscription_price_options')->cascadeOnDelete();
+            $table->decimal('price', 10, 2);
             $table->date('renewal_date');
-            $table->decimal('late_fee', 8, 2);
-            $table->date('from');
+            $table->decimal('late_fee', 10, 2);
+            $table->date('applies_from');
             $table->timestamps();
         });
     }

@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained();
-            $table->foreignId('product_option_id')->constrained();
-            $table->unsignedBigInteger('voucher_id')->nullable();
-            $table->unsignedBigInteger('shipment_id')->nullable();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('order_id')->constrained()->cascadeOnDelete();
+            $table->string('item_type')->comment('e.g. subscription, event, product');
+            $table->uuid('item_id')->nullable()->comment('polymorphic reference to the item');
+            $table->string('description');
+            $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('unit_price', 14, 6);
             $table->decimal('tax_rate', 5, 2)->nullable();
-            $table->unsignedInteger('quantity');
-            $table->decimal('price', 14, 6);
+            $table->decimal('total', 14, 6);
             $table->timestamps();
         });
     }

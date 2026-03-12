@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "membix": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "d:/Projects/membix/mcp-server/server.ts"],
+      "env": {}
+    }
+  }
+}

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accounting_codes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_config_financial_id')->constrained();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_config_financial_id')->constrained()->cascadeOnDelete();
             $table->string('code');
             $table->string('description');
             $table->timestamps();

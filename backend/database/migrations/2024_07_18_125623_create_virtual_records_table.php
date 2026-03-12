@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('virtual_records', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_id')->constrained();
-            $table->foreignId('member_id')->constrained();
-            $table->foreignId('virtual_form_id')->constrained();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('virtual_form_id')->constrained()->cascadeOnDelete();
             $table->json('data');
             $table->timestamps();
         });

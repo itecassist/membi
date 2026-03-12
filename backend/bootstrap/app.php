@@ -12,20 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectGuestsTo(function ($request) {
-            if ($request->is('api/*')) {
-                return null;
-            }
-            return route('login');
-        });
+        $middleware->redirectGuestsTo(fn () => null);
+        $middleware->alias([
+            'membix.admin' => \App\Http\Middleware\EnsureMembixAdmin::class,
+            'org.team'     => \App\Http\Middleware\SetOrganisationTeam::class,
+            'org.member'   => \App\Http\Middleware\ResolveMember::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->respond(function ($response, $exception, $request) {
-            if ($request->is('api/*') && $exception instanceof \Illuminate\Auth\AuthenticationException) {
-                return response()->json([
-                    'message' => 'Unauthenticated.',
-                ], 401);
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
             }
-            return $response;
         });
     })->create();

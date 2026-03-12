@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->integer('type');
             $table->string('title');
-            $table->foreignId('article_category_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('article_category_id')->constrained()->cascadeOnDelete();
             $table->string('page_title');
             $table->string('seo_name')->unique();
             $table->text('content');

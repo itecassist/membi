@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('faq_categories', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('description');
             $table->unsignedTinyInteger('sort_order');
             $table->timestamps();

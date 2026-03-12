@@ -24,19 +24,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'=>$this->faker->title(),
-            'first_name'=>$this->faker->firstName(),
-            'last_name'=>$this->faker->lastName(),
+
             'email'=>$this->faker->unique()->safeEmail(),
             'password'=>bcrypt('password'),
-            'mobile_phone'=>$this->faker->phoneNumber(),
-            'date_of_birth'=>$this->faker->date(),
-            'gender'=>$this->faker->randomElement(['male', 'female', 'other']),
-            'google_id'=>$this->faker->uuid(),
-            'facebook_id'=>$this->faker->uuid(),
-            'twitter_id'=>$this->faker->uuid(),
-            'github_id'=>$this->faker->uuid(),
-            'linkedin_id'=>$this->faker->uuid(),
             'is_admin'=>1,
             'is_active'=>1,
             'last_login_at'=>$this->faker->dateTime(),

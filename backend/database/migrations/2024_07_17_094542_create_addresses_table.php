@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('addresses', function (Blueprint $table) {
-            $table->id();
-            $table->morphs('addressable');
+            $table->uuid('id')->primary();
+            $table->uuidMorphs('addressable');
             $table->string('line_1', 64);
             $table->string('line_2', 64)->nullable();
             $table->string('line_3', 64)->nullable();
             $table->string('line_4', 64)->nullable();
             $table->string('postcode', 20);
-            $table->foreignId('country_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('zone_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('country_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('zone_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

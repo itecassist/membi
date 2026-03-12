@@ -12,12 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscription_price_options', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
-            $table->enum('eligibility', ['individual', 'adult', 'junior', 'family_individual_in_a_family', 'corporate_non_family'])->default('individual');
-            $table->enum('price_option', ['flat_price', 'number_of_subscriptions', 'custom_variable'])->default('flat_price');
-            $table->string('price_option_name');
-            $table->enum('published', ['published', 'renewals_only', 'un_published'])->default('published');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('subscription_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->enum('eligibility', ['individual', 'adult', 'junior', 'family', 'corporate'])->default('individual');
+            $table->enum('pricing_type', ['flat', 'tiered', 'custom_variable'])->default('flat');
+            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('price_min', 10, 2)->nullable();
+            $table->decimal('price_max', 10, 2)->nullable();
+            $table->enum('published', ['published', 'renewals_only', 'unpublished'])->default('published');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

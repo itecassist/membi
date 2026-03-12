@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tax_rates', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->foreignId('country_id')->constrained();
-            $table->foreignId('zone_id')->constrained();
+            $table->foreignUuid('country_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUuid('zone_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('rate', 7, 4);
             $table->timestamps();
         });

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_config_members', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('organisation_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
             $table->boolean('should_authorize_members')->default(false);
             $table->boolean('require_2fa')->default(false);
             $table->unsignedTinyInteger('max_days_between_2fa');
