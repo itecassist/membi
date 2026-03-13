@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -47,5 +48,23 @@ class Subscription extends Model
     public function memberSubscriptions(): HasMany
     {
         return $this->hasMany(MemberSubscription::class);
+    }
+
+    public function paymentMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            \App\Domain\Payment\Models\PaymentMethod::class,
+            'subscription_payment_methods'
+        )->withPivot('is_default')->withTimestamps();
+    }
+
+    public function priceRenewal(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SubscriptionPriceRenewal::class);
+    }
+
+    public function autoRenewal(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SubscriptionAutoRenewal::class);
     }
 }

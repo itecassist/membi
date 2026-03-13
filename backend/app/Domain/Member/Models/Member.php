@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Spatie\Permission\Traits\HasRoles;
 
-class Member extends Model
+class Member extends Model implements \Illuminate\Contracts\Auth\Access\Authorizable
 {
-    use HasFactory, HasUuids, HasRoles, SoftDeletes;
+    use Authorizable, HasFactory, HasUuids, HasRoles, SoftDeletes;
 
     protected string $guard_name = 'sanctum';
 
@@ -65,6 +66,11 @@ class Member extends Model
     public function subscriptions(): HasMany
     {
         return $this->hasMany(\App\Domain\Subscription\Models\MemberSubscription::class);
+    }
+
+    public function paymentMethods(): HasMany
+    {
+        return $this->hasMany(\App\Domain\Payment\Models\MemberPaymentMethod::class);
     }
 
     public function getFullNameAttribute(): string

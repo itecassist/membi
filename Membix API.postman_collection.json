@@ -1,0 +1,1528 @@
+{
+  "info": {
+    "name": "Membix API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",        "value": "http://127.0.0.1:8000/api" },
+    { "key": "token",           "value": "" },
+    { "key": "organisation_id", "value": "" },
+    { "key": "member_id",       "value": "" },
+    { "key": "role_id",         "value": "" },
+    { "key": "group_id",        "value": "" },
+    { "key": "subscription_id", "value": "" },
+    { "key": "price_option_id", "value": "" },
+    { "key": "basket_id",       "value": "" },
+    { "key": "basket_item_id",  "value": "" },
+    { "key": "order_payment_id","value": "" },
+    { "key": "payment_method_id","value": "" },
+    { "key": "member_payment_method_id", "value": "" },
+    { "key": "permission_id",        "value": "" },
+    { "key": "country_id",           "value": "" },
+    { "key": "zone_id",              "value": "" },
+    { "key": "tax_rate_id",          "value": "" },
+    { "key": "virtual_form_id",      "value": "" },
+    { "key": "virtual_field_id",     "value": "" },
+    { "key": "virtual_record_id",    "value": "" },
+    { "key": "article_category_id",  "value": "" },
+    { "key": "article_id",           "value": "" },
+    { "key": "faq_category_id",      "value": "" },
+    { "key": "faq_id",              "value": "" },
+    { "key": "email_template_id",    "value": "" },
+    { "key": "product_category_id",  "value": "" },
+    { "key": "product_id",           "value": "" },
+    { "key": "product_option_id",    "value": "" },
+    { "key": "accounting_code_id",   "value": "" },
+    { "key": "vat_id",              "value": "" },
+    { "key": "lookup_id",           "value": "" },
+    { "key": "list_id",             "value": "" },
+    { "key": "late_fee_id",         "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const jsonData = pm.response.json();",
+                "const token = jsonData.token || jsonData.access_token || jsonData.accessToken;",
+                "if (token) {",
+                "    pm.collectionVariables.set('token', token);",
+                "    console.log('Token saved to collection variable token');",
+                "} else {",
+                "    console.warn('Token not found in response. Fields checked: token, access_token, accessToken');",
+                "}"
+              ]
+            }
+          }],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const jsonData = pm.response.json();",
+                "const token = jsonData.token || jsonData.access_token || jsonData.accessToken;",
+                "if (token) {",
+                "    pm.collectionVariables.set('token', token);",
+                "    console.log('Token saved to collection variable token');",
+                "} else {",
+                "    console.warn('Token not found in response. Fields checked: token, access_token, accessToken');",
+                "}"
+              ]
+            }
+          }],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"alice@example.com\",\n    \"password\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Login as Membix Admin",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const jsonData = pm.response.json();",
+                "const token = jsonData.token || jsonData.access_token || jsonData.accessToken;",
+                "if (token) {",
+                "    pm.collectionVariables.set('token', token);",
+                "    console.log('Token saved to collection variable token');",
+                "} else {",
+                "    console.warn('Token not found in response. Fields checked: token, access_token, accessToken');",
+                "}"
+              ]
+            }
+          }],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@membix.com\",\n    \"password\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/me"
+          }
+        },
+        {
+          "name": "My Organisations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/organisations"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.collectionVariables.set('token', '');",
+                "console.log('Token removed from collection variable token');"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/logout"
+          }
+        },
+        {
+          "name": "Logout All Devices",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.collectionVariables.set('token', '');",
+                "console.log('Token removed from collection variable token');"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/auth/logout-all"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Membix Admin",
+      "item": [
+        {
+          "name": "Permissions",
+          "item": [
+            {
+              "name": "List Permissions",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions"
+              }
+            },
+            {
+              "name": "Create Permission",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"report.read\",\n    \"visible_to_organisations\": true\n}",
+                  "options": { "raw": { "language": "json" } }
+                }
+              }
+            },
+            {
+              "name": "Show Permission",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions/{{permission_id}}"
+              }
+            },
+            {
+              "name": "Update Permission",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions/{{permission_id}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"report.read\",\n    \"visible_to_organisations\": false\n}",
+                  "options": { "raw": { "language": "json" } }
+                }
+              }
+            },
+            {
+              "name": "Delete Permission",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions/{{permission_id}}"
+              }
+            },
+            {
+              "name": "Toggle Visibility",
+              "request": {
+                "method": "PATCH",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/permissions/{{permission_id}}/toggle-visibility"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Super Admins",
+          "item": [
+            {
+              "name": "List Super Admins",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/organisations/{{organisation_id}}/super-admins"
+              }
+            },
+            {
+              "name": "Add Super Admin",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/organisations/{{organisation_id}}/super-admins",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"user_id\": \"<user-uuid>\"\n}",
+                  "options": { "raw": { "language": "json" } }
+                }
+              }
+            },
+            {
+              "name": "Remove Super Admin",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/organisations/{{organisation_id}}/super-admins/{{member_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Content — Article Categories",
+          "item": [
+            {
+              "name": "Create Article Category",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/article-categories",
+                "body": { "mode": "raw", "raw": "{\n    \"name\": \"Getting Started\",\n    \"seo_name\": \"getting-started\",\n    \"live\": true,\n    \"article_live\": true\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update Article Category",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/article-categories/{{article_category_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"live\": false\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete Article Category",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/article-categories/{{article_category_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Content — Articles",
+          "item": [
+            {
+              "name": "Create Article",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/articles",
+                "body": { "mode": "raw", "raw": "{\n    \"article_category_id\": \"{{article_category_id}}\",\n    \"type\": \"help\",\n    \"title\": \"How to register\",\n    \"seo_name\": \"how-to-register\",\n    \"content\": \"<p>Step by step guide.</p>\",\n    \"live\": true\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update Article",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/articles/{{article_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"live\": false\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete Article",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/articles/{{article_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Content — FAQ Categories",
+          "item": [
+            {
+              "name": "Create FAQ Category",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faq-categories",
+                "body": { "mode": "raw", "raw": "{\n    \"description\": \"Membership FAQs\",\n    \"sort_order\": 1\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update FAQ Category",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faq-categories/{{faq_category_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"sort_order\": 2\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete FAQ Category",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faq-categories/{{faq_category_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Content — FAQs",
+          "item": [
+            {
+              "name": "Create FAQ",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faqs",
+                "body": { "mode": "raw", "raw": "{\n    \"faq_category_id\": \"{{faq_category_id}}\",\n    \"question\": \"How do I cancel my membership?\",\n    \"answer\": \"Contact your club administrator.\",\n    \"sort_order\": 1,\n    \"display_on_help\": true\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update FAQ",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faqs/{{faq_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"paused\": true\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete FAQ",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/faqs/{{faq_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Virtual Forms (Admin)",
+          "item": [
+            {
+              "name": "Create Virtual Form",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms",
+                "body": { "mode": "raw", "raw": "{\n    \"category\": \"membership\",\n    \"name\": \"Junior Application Form\"\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update Virtual Form",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms/{{virtual_form_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"name\": \"Junior Application Form v2\"\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete Virtual Form",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms/{{virtual_form_id}}"
+              }
+            },
+            {
+              "name": "Add Field to Form",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms/{{virtual_form_id}}/fields",
+                "body": { "mode": "raw", "raw": "{\n    \"field_name\": \"emergency_contact\",\n    \"description\": \"Emergency contact name and phone\",\n    \"required\": true,\n    \"type\": \"text\",\n    \"gdpr_sensitive\": false,\n    \"active\": true,\n    \"sort_order\": 1\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update Field",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms/{{virtual_form_id}}/fields/{{virtual_field_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"active\": false\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete Field",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/virtual-forms/{{virtual_form_id}}/fields/{{virtual_field_id}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tax Rates (Admin)",
+          "item": [
+            {
+              "name": "Create Tax Rate",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/tax-rates",
+                "body": { "mode": "raw", "raw": "{\n    \"name\": \"UK Standard\",\n    \"rate\": 20.0,\n    \"country_id\": \"{{country_id}}\"\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Update Tax Rate",
+              "request": {
+                "method": "PUT",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/tax-rates/{{tax_rate_id}}",
+                "body": { "mode": "raw", "raw": "{\n    \"rate\": 25.0\n}", "options": { "raw": { "language": "json" } } }
+              }
+            },
+            {
+              "name": "Delete Tax Rate",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Accept", "value": "application/json" }],
+                "url": "{{base_url}}/admin/tax-rates/{{tax_rate_id}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Organisations",
+      "item": [
+        {
+          "name": "List Organisations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations"
+          }
+        },
+        {
+          "name": "Create Organisation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"My Sports Club\",\n    \"seo_name\": \"my-sports-club\",\n    \"email\": \"info@mysportsclub.com\",\n    \"timezone\": \"Europe/London\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Organisation",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}"
+          }
+        },
+        {
+          "name": "Update Organisation",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"My Sports Club (Updated)\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Organisation",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Roles",
+      "item": [
+        {
+          "name": "List Roles",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles"
+          }
+        },
+        {
+          "name": "Available Permissions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/available-permissions"
+          }
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"treasurer\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Role",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}"
+          }
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"treasurer-updated\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}"
+          }
+        },
+        {
+          "name": "Sync Role Permissions",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"permissions\": [\"member.read\", \"member.update\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Assign Role to Member",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/members",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"member_id\": \"{{member_id}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Remove Role from Member",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/members",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"member_id\": \"{{member_id}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Members",
+      "item": [
+        {
+          "name": "List Members",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members"
+          }
+        },
+        {
+          "name": "Create Member",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"jane@example.com\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Doe\",\n    \"date_of_birth\": \"1990-06-15\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Member",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}"
+          }
+        },
+        {
+          "name": "Update Member",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Member",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}"
+          }
+        },
+        {
+          "name": "Member Payment Methods",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}/payment-methods"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Groups",
+      "item": [
+        {
+          "name": "List Groups",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups"
+          }
+        },
+        {
+          "name": "Create Group",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Juniors\",\n    \"type\": \"corporate\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Group",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}"
+          }
+        },
+        {
+          "name": "Update Group",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Junior Members\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Group",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}"
+          }
+        },
+        {
+          "name": "List Group Members",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members"
+          }
+        },
+        {
+          "name": "Add Member to Group",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"member_id\": \"{{member_id}}\",\n    \"is_admin\": false\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Remove Member from Group",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members/{{member_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Subscriptions",
+      "item": [
+        {
+          "name": "List Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions"
+          }
+        },
+        {
+          "name": "Create Subscription",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Annual Membership\",\n    \"period_type\": \"year\",\n    \"period_count\": 1,\n    \"renewal_type\": \"auto_renew\",\n    \"is_published\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Subscription",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}"
+          }
+        },
+        {
+          "name": "Update Subscription",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Annual Membership (Updated)\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Subscription",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}"
+          }
+        },
+        {
+          "name": "List Price Options",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options"
+          }
+        },
+        {
+          "name": "Create Price Option",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"label\": \"Adult\",\n    \"price\": 50.00,\n    \"currency_code\": \"GBP\",\n    \"pricing_type\": \"flat\",\n    \"is_active\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Update Price Option",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"price\": 55.00\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Price Option",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}"
+          }
+        },
+        {
+          "name": "Get Renewal Settings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/renewal-settings"
+          }
+        },
+        {
+          "name": "Update Renewal Settings",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/renewal-settings",
+            "body": { "mode": "raw", "raw": "{\n    \"schedule_late_fees\": true,\n    \"late_fee_option\": \"fixed\",\n    \"renewal_day_month\": \"01-09\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Get Auto-Renewal Settings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/auto-renewal-settings"
+          }
+        },
+        {
+          "name": "Update Auto-Renewal Settings",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/auto-renewal-settings",
+            "body": { "mode": "raw", "raw": "{\n    \"enable_auto_renewal\": true,\n    \"apply_to_all_subscription_fees\": true,\n    \"order_expiry_days\": 14\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Get New Member Settings (Price Option)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings"
+          }
+        },
+        {
+          "name": "Update New Member Settings (Price Option)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings",
+            "body": { "mode": "raw", "raw": "{\n    \"enable_rollover\": true,\n    \"rollover_period_days\": 30,\n    \"enable_pro_rata_pricing\": false\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "List Late Fees (Price Option)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees"
+          }
+        },
+        {
+          "name": "Create Late Fee (Price Option)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees",
+            "body": { "mode": "raw", "raw": "{\n    \"price\": 55.00,\n    \"renewal_date\": \"2026-09-01\",\n    \"late_fee\": 5.00,\n    \"applies_from\": \"2026-10-01\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Delete Late Fee (Price Option)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees/{{late_fee_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Checkout",
+      "item": [
+        {
+          "name": "Create Basket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"member\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Basket",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}"
+          }
+        },
+        {
+          "name": "Add Item to Basket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/items",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"price_option_id\": \"{{price_option_id}}\",\n    \"quantity\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Remove Item from Basket",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/items/{{basket_item_id}}"
+          }
+        },
+        {
+          "name": "Start Checkout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mode\": \"member\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Capture Email (public mode)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/email",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"guest@example.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Set Allocations",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/allocations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"allocations\": {\n        \"{{basket_item_id}}\": \"{{member_id}}\"\n    }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Set Form Data",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/forms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"forms\": {\n        \"{{member_id}}\": {\n            \"emergency_contact\": \"Jane Doe — 07700900000\"\n        }\n    }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Set Payment Method",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/payment-method",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"payment_method_id\": \"<payment-method-uuid>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/order"
+          }
+        },
+        {
+          "name": "Finalise Checkout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/finalize"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Payment Methods (Admin)",
+      "item": [
+        {
+          "name": "List Payment Methods",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods"
+          }
+        },
+        {
+          "name": "Create Payment Method",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"bank_transfer\",\n    \"class\": \"one_off\",\n    \"name\": \"Bank Transfer\",\n    \"explanation\": \"Pay by bank transfer. We will email you the details.\",\n    \"checkout_text\": \"You will receive bank transfer instructions by email.\",\n    \"success_text\": \"Thank you! Please transfer the amount within 7 days.\",\n    \"is_active\": true,\n    \"is_default\": false,\n    \"admin_only\": false,\n    \"requires_confirmation\": true,\n    \"surcharge_percentage\": 0,\n    \"surcharge_fixed\": 0\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Payment Method",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}"
+          }
+        },
+        {
+          "name": "Update Payment Method",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Bank Transfer (Updated)\",\n    \"is_active\": true,\n    \"is_default\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Payment Method",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Payments",
+      "item": [
+        {
+          "name": "Store Gateway Config",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/gateway-configs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"worldpay\",\n    \"is_active\": true,\n    \"config\": {\n        \"merchant_entity_id\": \"90648\",\n        \"api_key\": \"90648.1953\",\n        \"api_secret\": \"a65e0449-ca2d-4400-8fb3-4cd55e1a8c1b\",\n        \"webhook_secret\": \"\",\n        \"environment\": \"sandbox\"\n    }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Store GoCardless Config",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/gateway-configs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"gocardless\",\n    \"is_active\": true,\n    \"config\": {\n        \"access_token\": \"sandbox_xxxxxxxxxxxxxxxx\",\n        \"webhook_secret\": \"\",\n        \"environment\": \"sandbox\"\n    }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/order-payments/{{order_payment_id}}/initiate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"success_url\": \"http://localhost:3000/checkout/complete\",\n    \"cancel_url\": \"http://localhost:3000/checkout/payment\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Cancel Member Payment Method",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/member-payment-methods/{{member_payment_method_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Reference Data (Public)",
+      "item": [
+        {
+          "name": "List Countries",
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/countries" }
+        },
+        {
+          "name": "Show Country",
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/countries/{{country_id}}" }
+        },
+        {
+          "name": "Country Zones",
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/countries/{{country_id}}/zones" }
+        }
+      ]
+    },
+
+    {
+      "name": "Reference Data (Auth)",
+      "item": [
+        {
+          "name": "List Tax Rates",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/tax-rates" }
+        },
+        {
+          "name": "Show Tax Rate",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/tax-rates/{{tax_rate_id}}" }
+        },
+        {
+          "name": "List Virtual Forms",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms" }
+        },
+        {
+          "name": "Show Virtual Form (with fields)",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms/{{virtual_form_id}}" }
+        },
+        {
+          "name": "List Virtual Form Fields",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms/{{virtual_form_id}}/fields" }
+        },
+        {
+          "name": "List Article Categories",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories" }
+        },
+        {
+          "name": "Show Article Category",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories/{{article_category_id}}" }
+        },
+        {
+          "name": "List Articles in Category",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories/{{article_category_id}}/articles" }
+        },
+        {
+          "name": "Show Article",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/articles/{{article_id}}" }
+        },
+        {
+          "name": "List FAQ Categories",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories" }
+        },
+        {
+          "name": "Show FAQ Category",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories/{{faq_category_id}}" }
+        },
+        {
+          "name": "List FAQs in Category",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories/{{faq_category_id}}/faqs" }
+        },
+        {
+          "name": "Show FAQ",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faqs/{{faq_id}}" }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Config",
+      "item": [
+        {
+          "name": "Get Member Config",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/member" }
+        },
+        {
+          "name": "Update Member Config",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/config/member",
+            "body": { "mode": "raw", "raw": "{\n    \"has_junior_members\": true,\n    \"junior_member_max_age\": 18,\n    \"has_membership_numbers\": true,\n    \"does_membership_numbers_auto_increment\": true\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Get Subscription Config",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/subscription" }
+        },
+        {
+          "name": "Update Subscription Config",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/config/subscription",
+            "body": { "mode": "raw", "raw": "{\n    \"renew_annual_subscription_months\": 3,\n    \"auto_renewal_order_days\": 30\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Get Financial Config",
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/financial" }
+        },
+        {
+          "name": "Update Financial Config",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/config/financial",
+            "body": { "mode": "raw", "raw": "{\n    \"currency\": \"£\",\n    \"vat_status\": false\n}", "options": { "raw": { "language": "json" } } }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Financial",
+      "item": [
+        {
+          "name": "Accounting Codes",
+          "item": [
+            { "name": "List Accounting Codes",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes" } },
+            { "name": "Create Accounting Code", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes", "body": { "mode": "raw", "raw": "{\n    \"code\": \"4100\",\n    \"description\": \"Membership Income\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Accounting Code",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}" } },
+            { "name": "Update Accounting Code", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}", "body": { "mode": "raw", "raw": "{\n    \"description\": \"Membership Fees\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Accounting Code", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}" } }
+          ]
+        },
+        {
+          "name": "VAT Rates",
+          "item": [
+            { "name": "List VATs",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats" } },
+            { "name": "Create VAT",  "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Standard Rate\",\n    \"rate\": 20.0\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show VAT",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}" } },
+            { "name": "Update VAT",  "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}", "body": { "mode": "raw", "raw": "{\n    \"rate\": 25.0\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete VAT",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}" } }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Lookups & Lists",
+      "item": [
+        {
+          "name": "Lookups",
+          "item": [
+            { "name": "List Lookups",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups" } },
+            { "name": "Create Lookup", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Sport\",\n    \"value\": \"tennis\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Lookup",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}" } },
+            { "name": "Update Lookup", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}", "body": { "mode": "raw", "raw": "{\n    \"value\": \"squash\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Lookup", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}" } }
+          ]
+        },
+        {
+          "name": "Organisation Lists",
+          "item": [
+            { "name": "List Lists",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists" } },
+            { "name": "Create List", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults\",\n    \"description\": \"All active adult members\",\n    \"query\": \"{}\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show List",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}" } },
+            { "name": "Update List", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete List", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}" } }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Communication",
+      "item": [
+        { "name": "List Email Templates",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates" } },
+        {
+          "name": "Create Email Template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates",
+            "body": { "mode": "raw", "raw": "{\n    \"name\": \"Welcome Email\",\n    \"subject\": \"Welcome to the club!\",\n    \"content\": \"<p>Dear {{member_name}}, welcome!</p>\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        { "name": "Show Email Template",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}" } },
+        {
+          "name": "Update Email Template",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}",
+            "body": { "mode": "raw", "raw": "{\n    \"subject\": \"Welcome — updated subject\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        { "name": "Delete Email Template",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}" } }
+      ]
+    },
+
+    {
+      "name": "Org — Forms",
+      "item": [
+        { "name": "List Virtual Records",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records" } },
+        {
+          "name": "Create Virtual Record",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records",
+            "body": { "mode": "raw", "raw": "{\n    \"virtual_form_id\": \"{{virtual_form_id}}\",\n    \"member_id\": \"{{member_id}}\",\n    \"data\": { \"emergency_contact\": \"Jane Doe — 07700900000\" }\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        { "name": "Show Virtual Record",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}" } },
+        {
+          "name": "Update Virtual Record",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}",
+            "body": { "mode": "raw", "raw": "{\n    \"data\": { \"emergency_contact\": \"John Smith — 07700900001\" }\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        { "name": "Delete Virtual Record",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}" } }
+      ]
+    },
+
+    {
+      "name": "Org — Products",
+      "item": [
+        {
+          "name": "Product Categories",
+          "item": [
+            { "name": "List Product Categories",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories" } },
+            { "name": "Create Product Category", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Clothing\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Product Category",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}" } },
+            { "name": "Update Product Category", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Apparel\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product Category", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}" } }
+          ]
+        },
+        {
+          "name": "Products",
+          "item": [
+            { "name": "List Products",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products" } },
+            { "name": "Create Product", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt\",\n    \"code\": \"TSHIRT-01\",\n    \"description\": \"Official club t-shirt\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Product",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}" } },
+            { "name": "Update Product", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}" } }
+          ]
+        },
+        {
+          "name": "Product Options",
+          "item": [
+            { "name": "List Product Options",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options" } },
+            { "name": "Create Product Option", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Small\",\n    \"code\": \"TSHIRT-S\",\n    \"available\": true\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Update Product Option", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options/{{product_option_id}}", "body": { "mode": "raw", "raw": "{\n    \"available\": false\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product Option", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options/{{product_option_id}}" } }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Webhooks (Gateway → Server)",
+      "item": [
+        {
+          "name": "GoCardless Webhook",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",           "value": "application/json" },
+              { "key": "Webhook-Signature",       "value": "<gocardless-signature>" }
+            ],
+            "url": "{{base_url}}/webhooks/gocardless/{{organisation_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"events\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "WorldPay Webhook",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",        "value": "application/json" },
+              { "key": "X-WorldPay-Signature","value": "<worldpay-hmac-signature>" }
+            ],
+            "url": "{{base_url}}/webhooks/worldpay/{{organisation_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"transactionReference\": \"<tracking_token>\",\n    \"outcome\": \"authorized\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    }
+
+  ]
+}

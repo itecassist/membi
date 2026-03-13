@@ -99,20 +99,20 @@ Based on spec.md and membi-gitlab's SubscriptionType/SubscriptionTypeOption/Subs
 
 ## Current Build Phase
 **Phase 1 — Foundation** (current focus):
-- [ ] DDD folder structure
-- [ ] Schema fixes (new corrective migrations)
-- [ ] Groups migration + model
-- [ ] `member_subscriptions` migration + model
-- [ ] Laravel Sanctum auth (register, login, logout, 2FA)
-- [ ] Organisation + Member CRUD
-- [ ] Subscription type + price option CRUD
+- [x] DDD folder structure
+- [x] Schema fixes (new corrective migrations)
+- [x] Groups migration + model
+- [x] `member_subscriptions` migration + model
+- [x] Laravel Sanctum auth (register, login, logout) ← 2FA will not be implemented
+- [x] Organisation + Member CRUD
+- [x] Subscription type + price option CRUD
 
 **Phase 2 — Core transaction flow**:
-- [ ] Checkout flow
-- [ ] Orders + order items
-- [ ] GoCardless integration
-- [ ] WorldPay integration
-- [ ] Renewal jobs
+- [x] Checkout flow
+- [x] Orders + order items
+- [x] GoCardless integration
+- [x] WorldPay integration
+- [x] Renewal jobs
 
 **Phase 3 — Admin & Member portals**:
 - [ ] Next.js frontend (admin + member)

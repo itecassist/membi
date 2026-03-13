@@ -55,4 +55,34 @@ class Organisation extends Model
     {
         return $this->hasOne(OrganisationConfig::class);
     }
+
+    public function configMember(): HasOne
+    {
+        return $this->hasOne(OrganisationConfigMember::class);
+    }
+
+    public function configSubscription(): HasOne
+    {
+        return $this->hasOne(OrganisationConfigSubscription::class);
+    }
+
+    public function configFinancial(): HasOne
+    {
+        return $this->hasOne(OrganisationConfigFinancial::class);
+    }
+
+    public function configAdmins(): HasMany
+    {
+        return $this->hasMany(OrganisationConfigAdmin::class);
+    }
+
+    public function emailTemplates(): HasMany
+    {
+        return $this->hasMany(\App\Domain\Communication\Models\EmailTemplate::class);
+    }
+
+    public function organisationLists(): HasMany
+    {
+        return $this->hasMany(OrganisationList::class);
+    }
 }

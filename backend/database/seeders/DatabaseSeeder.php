@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             OrganisationSeeder::class,  // creates orgs, system roles, assigns owner + super-admin
             MemberSeeder::class,        // additional members + groups
-            SubscriptionSeeder::class,  // subscriptions + price options
+            SubscriptionSeeder::class,   // subscriptions + price options
+            PaymentMethodSeeder::class,  // offline + gateway payment methods per org
         ]);
     }
 }

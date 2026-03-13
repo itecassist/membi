@@ -42,4 +42,14 @@ class SubscriptionPriceOption extends Model
     {
         return $this->hasMany(MemberSubscription::class);
     }
+
+    public function newMemberSettings(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SubscriptionPriceOptionNewMember::class, 'subscription_price_option_id');
+    }
+
+    public function lateFees(): HasMany
+    {
+        return $this->hasMany(SubscriptionPriceLateFee::class, 'subscription_price_option_id');
+    }
 }

@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('baskets', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('organisation_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('member_id')->nullable()->constrained()->nullOnDelete();
+            // public = unauthenticated, member = logged-in member, admin = admin acting
+            $table->enum('type', ['public', 'member', 'admin'])->default('public');
+            // Captured email for public/guest checkouts
+            $table->string('captured_email')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('baskets');
+    }
+};

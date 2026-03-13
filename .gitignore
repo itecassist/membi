@@ -7,7 +7,7 @@ docs/
 # Frontend (will be added when scaffolded)
 # frontend/node_modules/
 # frontend/.next/
-
+.env
 # OS
 .DS_Store
 Thumbs.db
