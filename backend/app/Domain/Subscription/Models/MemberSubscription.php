@@ -19,19 +19,29 @@ class MemberSubscription extends Model
         'subscription_price_option_id',
         'payment_method_id',
         'order_id',
+        'group_id',
+        'instance_type',
         'starts_at',
         'ends_at',
         'renewal_type',
         'status',
         'renewal_status',
         'payment_gateway_reference',
+        'is_trial',
+        'is_renewable',
+        'last_billed_at',
+        'next_billing_date',
     ];
 
     protected function casts(): array
     {
         return [
-            'starts_at' => 'date',
-            'ends_at'   => 'date',
+            'starts_at'          => 'date',
+            'ends_at'            => 'date',
+            'last_billed_at'     => 'date',
+            'next_billing_date'  => 'date',
+            'is_trial'           => 'boolean',
+            'is_renewable'       => 'boolean',
         ];
     }
 
@@ -58,6 +68,16 @@ class MemberSubscription extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(\App\Domain\Order\Models\Order::class);
+    }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(\App\Domain\Member\Models\Group::class);
+    }
+
+    public function allocations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SubscriptionInstanceAllocation::class);
     }
 
     public function isActive(): bool

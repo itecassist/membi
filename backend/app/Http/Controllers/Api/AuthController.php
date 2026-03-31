@@ -57,20 +57,23 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        // If logging in from an org page, include that org's member context
-        if ($request->filled('organisation')) {
+        // Resolve the organisation context from the subdomain (primary, via route model binding)
+        // or fall back to an explicit 'organisation' body param (seo_name or UUID).
+        $org = $request->route('subdomain');
+
+        if (! $org && $request->filled('organisation')) {
             $org = Organisation::where('seo_name', $request->organisation)
                 ->orWhere('id', $request->organisation)
                 ->first();
+        }
 
-            if ($org) {
-                $member = Member::where('user_id', $user->id)
-                    ->where('organisation_id', $org->id)
-                    ->first();
+        if ($org) {
+            $member = Member::where('user_id', $user->id)
+                ->where('organisation_id', $org->id)
+                ->first();
 
-                $response['organisation'] = new OrganisationResource($org);
-                $response['member']       = $member ? new MemberResource($member) : null;
-            }
+            $response['organisation'] = new OrganisationResource($org);
+            $response['member']       = $member ? new MemberResource($member) : null;
         }
 
         return response()->json($response);

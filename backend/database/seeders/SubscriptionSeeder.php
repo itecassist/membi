@@ -11,8 +11,8 @@ class SubscriptionSeeder extends Seeder
 {
     public function run(): void
     {
-        $tennis  = Organisation::where('seo_name', 'riverside-tennis')->firstOrFail();
-        $cycling = Organisation::where('seo_name', 'northside-cycling')->firstOrFail();
+        $tennis  = Organisation::where('seo_name', 'river')->firstOrFail();
+        $cycling = Organisation::where('seo_name', 'north')->firstOrFail();
 
         // ── Riverside Tennis Club ─────────────────────────────────────────────
 

@@ -36,7 +36,14 @@
     { "key": "vat_id",              "value": "" },
     { "key": "lookup_id",           "value": "" },
     { "key": "list_id",             "value": "" },
-    { "key": "late_fee_id",         "value": "" }
+    { "key": "late_fee_id",         "value": "" },
+    { "key": "member_subscription_id",  "value": "" },
+    { "key": "order_id",               "value": "" },
+    { "key": "order_sub_item_id",      "value": "" },
+    { "key": "subscription_category_id", "value": "" },
+    { "key": "audit_log_id",           "value": "" },
+    { "key": "subdomain",    "value": "river" },
+    { "key": "org_base_url", "value": "http://{{subdomain}}.localhost:8000/api" }
   ],
   "auth": {
     "type": "bearer",
@@ -68,7 +75,7 @@
             "auth": { "type": "noauth" },
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/register",
+            "url": "{{org_base_url}}/auth/register",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
@@ -97,7 +104,7 @@
             "auth": { "type": "noauth" },
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/login",
+            "url": "{{org_base_url}}/auth/login",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"alice@example.com\",\n    \"password\": \"password\"\n}",
@@ -126,7 +133,7 @@
             "auth": { "type": "noauth" },
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/login",
+            "url": "{{org_base_url}}/auth/login",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"admin@membix.com\",\n    \"password\": \"password\"\n}",
@@ -139,7 +146,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/me"
+            "url": "{{org_base_url}}/auth/me"
           }
         },
         {
@@ -147,7 +154,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/organisations"
+            "url": "{{org_base_url}}/auth/organisations"
           }
         },
         {
@@ -164,7 +171,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/logout"
+            "url": "{{org_base_url}}/auth/logout"
           }
         },
         {
@@ -181,7 +188,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/auth/logout-all"
+            "url": "{{org_base_url}}/auth/logout-all"
           }
         }
       ]
@@ -508,6 +515,7 @@
         {
           "name": "List Organisations",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
             "url": "{{base_url}}/organisations"
@@ -521,7 +529,7 @@
             "url": "{{base_url}}/organisations",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"My Sports Club\",\n    \"seo_name\": \"my-sports-club\",\n    \"email\": \"info@mysportsclub.com\",\n    \"timezone\": \"Europe/London\"\n}",
+              "raw": "{\n    \"name\": \"My Sports Club\",\n    \"seo_name\": \"my-sports-club\",\n    \"email\": \"info@mysportsclub.com\",\n    \"timezone\": \"Europe/London\",\n    \"currency\": \"GBP\",\n    \"locale\": \"en-GB\"\n}",
               "options": { "raw": { "language": "json" } }
             }
           }
@@ -529,6 +537,7 @@
         {
           "name": "Show Organisation",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
             "url": "{{base_url}}/organisations/{{organisation_id}}"
@@ -566,7 +575,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles"
+            "url": "{{org_base_url}}/roles"
           }
         },
         {
@@ -574,7 +583,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/available-permissions"
+            "url": "{{org_base_url}}/available-permissions"
           }
         },
         {
@@ -582,7 +591,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles",
+            "url": "{{org_base_url}}/roles",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"treasurer\"\n}",
@@ -595,7 +604,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}"
+            "url": "{{org_base_url}}/roles/{{role_id}}"
           }
         },
         {
@@ -603,7 +612,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}",
+            "url": "{{org_base_url}}/roles/{{role_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"treasurer-updated\"\n}",
@@ -616,7 +625,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}"
+            "url": "{{org_base_url}}/roles/{{role_id}}"
           }
         },
         {
@@ -624,7 +633,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/permissions",
+            "url": "{{org_base_url}}/roles/{{role_id}}/permissions",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"permissions\": [\"member.read\", \"member.update\"]\n}",
@@ -637,7 +646,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/members",
+            "url": "{{org_base_url}}/roles/{{role_id}}/members",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"member_id\": \"{{member_id}}\"\n}",
@@ -650,7 +659,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/roles/{{role_id}}/members",
+            "url": "{{org_base_url}}/roles/{{role_id}}/members",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"member_id\": \"{{member_id}}\"\n}",
@@ -669,7 +678,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members"
+            "url": "{{org_base_url}}/members"
           }
         },
         {
@@ -677,7 +686,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members",
+            "url": "{{org_base_url}}/members",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"jane@example.com\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Doe\",\n    \"date_of_birth\": \"1990-06-15\"\n}",
@@ -690,7 +699,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}"
+            "url": "{{org_base_url}}/members/{{member_id}}"
           }
         },
         {
@@ -698,7 +707,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}",
+            "url": "{{org_base_url}}/members/{{member_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\"\n}",
@@ -711,7 +720,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}"
+            "url": "{{org_base_url}}/members/{{member_id}}"
           }
         },
         {
@@ -719,7 +728,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/members/{{member_id}}/payment-methods"
+            "url": "{{org_base_url}}/members/{{member_id}}/payment-methods"
           }
         }
       ]
@@ -733,7 +742,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups"
+            "url": "{{org_base_url}}/groups"
           }
         },
         {
@@ -741,7 +750,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups",
+            "url": "{{org_base_url}}/groups",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"Juniors\",\n    \"type\": \"corporate\"\n}",
@@ -754,7 +763,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}"
+            "url": "{{org_base_url}}/groups/{{group_id}}"
           }
         },
         {
@@ -762,7 +771,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}",
+            "url": "{{org_base_url}}/groups/{{group_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"Junior Members\"\n}",
@@ -775,7 +784,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}"
+            "url": "{{org_base_url}}/groups/{{group_id}}"
           }
         },
         {
@@ -783,7 +792,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members"
+            "url": "{{org_base_url}}/groups/{{group_id}}/members"
           }
         },
         {
@@ -791,7 +800,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members",
+            "url": "{{org_base_url}}/groups/{{group_id}}/members",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"member_id\": \"{{member_id}}\",\n    \"is_admin\": false\n}",
@@ -804,7 +813,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/groups/{{group_id}}/members/{{member_id}}"
+            "url": "{{org_base_url}}/groups/{{group_id}}/members/{{member_id}}"
           }
         }
       ]
@@ -818,7 +827,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions"
+            "url": "{{org_base_url}}/subscriptions"
           }
         },
         {
@@ -826,10 +835,10 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions",
+            "url": "{{org_base_url}}/subscriptions",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Annual Membership\",\n    \"period_type\": \"year\",\n    \"period_count\": 1,\n    \"renewal_type\": \"auto_renew\",\n    \"is_published\": true\n}",
+              "raw": "{\n    \"name\": \"Annual Membership\",\n    \"description\": \"Full annual membership\",\n    \"is_membership\": true,\n    \"period_type\": \"year\",\n    \"period_count\": 1,\n    \"renewal_type\": \"auto_renew\",\n    \"pricing_type\": \"flat\",\n    \"published\": \"published\"\n}",
               "options": { "raw": { "language": "json" } }
             }
           }
@@ -839,7 +848,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}"
           }
         },
         {
@@ -847,7 +856,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"Annual Membership (Updated)\"\n}",
@@ -860,7 +869,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}"
           }
         },
         {
@@ -868,7 +877,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options"
           }
         },
         {
@@ -876,10 +885,10 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"label\": \"Adult\",\n    \"price\": 50.00,\n    \"currency_code\": \"GBP\",\n    \"pricing_type\": \"flat\",\n    \"is_active\": true\n}",
+              "raw": "{\n    \"label\": \"Adult\",\n    \"price\": 50.00,\n    \"currency_code\": \"GBP\",\n    \"pricing_type\": \"flat\",\n    \"pricing_config\": null,\n    \"eligibility\": \"adult\",\n    \"instance_type\": \"primary\",\n    \"use_pro_rata\": false,\n    \"allow_instalments\": false,\n    \"offer_trial\": false,\n    \"is_active\": true\n}",
               "options": { "raw": { "language": "json" } }
             }
           }
@@ -889,7 +898,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"price\": 55.00\n}",
@@ -902,7 +911,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}"
           }
         },
         {
@@ -910,7 +919,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/renewal-settings"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/renewal-settings"
           }
         },
         {
@@ -918,7 +927,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/renewal-settings",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/renewal-settings",
             "body": { "mode": "raw", "raw": "{\n    \"schedule_late_fees\": true,\n    \"late_fee_option\": \"fixed\",\n    \"renewal_day_month\": \"01-09\"\n}", "options": { "raw": { "language": "json" } } }
           }
         },
@@ -927,7 +936,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/auto-renewal-settings"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/auto-renewal-settings"
           }
         },
         {
@@ -935,7 +944,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/auto-renewal-settings",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/auto-renewal-settings",
             "body": { "mode": "raw", "raw": "{\n    \"enable_auto_renewal\": true,\n    \"apply_to_all_subscription_fees\": true,\n    \"order_expiry_days\": 14\n}", "options": { "raw": { "language": "json" } } }
           }
         },
@@ -944,7 +953,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings"
           }
         },
         {
@@ -952,7 +961,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/new-member-settings",
             "body": { "mode": "raw", "raw": "{\n    \"enable_rollover\": true,\n    \"rollover_period_days\": 30,\n    \"enable_pro_rata_pricing\": false\n}", "options": { "raw": { "language": "json" } } }
           }
         },
@@ -961,7 +970,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees"
           }
         },
         {
@@ -969,7 +978,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees",
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees",
             "body": { "mode": "raw", "raw": "{\n    \"price\": 55.00,\n    \"renewal_date\": \"2026-09-01\",\n    \"late_fee\": 5.00,\n    \"applies_from\": \"2026-10-01\"\n}", "options": { "raw": { "language": "json" } } }
           }
         },
@@ -978,7 +987,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees/{{late_fee_id}}"
+            "url": "{{org_base_url}}/subscriptions/{{subscription_id}}/price-options/{{price_option_id}}/late-fees/{{late_fee_id}}"
           }
         }
       ]
@@ -992,7 +1001,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets",
+            "url": "{{org_base_url}}/baskets",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"type\": \"member\"\n}",
@@ -1005,7 +1014,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}"
+            "url": "{{org_base_url}}/baskets/{{basket_id}}"
           }
         },
         {
@@ -1013,10 +1022,10 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/items",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/items",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"price_option_id\": \"{{price_option_id}}\",\n    \"quantity\": 1\n}",
+              "raw": "{\n    \"price_option_id\": \"{{price_option_id}}\",\n    \"adult_quantity\": 1,\n    \"junior_quantity\": 0\n}",
               "options": { "raw": { "language": "json" } }
             }
           }
@@ -1026,7 +1035,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/items/{{basket_item_id}}"
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/items/{{basket_item_id}}"
           }
         },
         {
@@ -1034,7 +1043,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"mode\": \"member\"\n}",
@@ -1047,7 +1056,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/email",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/email",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"guest@example.com\"\n}",
@@ -1060,7 +1069,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/allocations",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/allocations",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"allocations\": {\n        \"{{basket_item_id}}\": \"{{member_id}}\"\n    }\n}",
@@ -1073,7 +1082,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/forms",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/forms",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"forms\": {\n        \"{{member_id}}\": {\n            \"emergency_contact\": \"Jane Doe — 07700900000\"\n        }\n    }\n}",
@@ -1086,7 +1095,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/payment-method",
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/payment-method",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"payment_method_id\": \"<payment-method-uuid>\"\n}",
@@ -1099,7 +1108,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/order"
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/order"
           }
         },
         {
@@ -1107,7 +1116,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/baskets/{{basket_id}}/checkout/finalize"
+            "url": "{{org_base_url}}/baskets/{{basket_id}}/checkout/finalize"
           }
         }
       ]
@@ -1121,7 +1130,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods"
+            "url": "{{org_base_url}}/payment-methods"
           }
         },
         {
@@ -1129,7 +1138,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods",
+            "url": "{{org_base_url}}/payment-methods",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"type\": \"bank_transfer\",\n    \"class\": \"one_off\",\n    \"name\": \"Bank Transfer\",\n    \"explanation\": \"Pay by bank transfer. We will email you the details.\",\n    \"checkout_text\": \"You will receive bank transfer instructions by email.\",\n    \"success_text\": \"Thank you! Please transfer the amount within 7 days.\",\n    \"is_active\": true,\n    \"is_default\": false,\n    \"admin_only\": false,\n    \"requires_confirmation\": true,\n    \"surcharge_percentage\": 0,\n    \"surcharge_fixed\": 0\n}",
@@ -1142,7 +1151,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}"
+            "url": "{{org_base_url}}/payment-methods/{{payment_method_id}}"
           }
         },
         {
@@ -1150,7 +1159,7 @@
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}",
+            "url": "{{org_base_url}}/payment-methods/{{payment_method_id}}",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"Bank Transfer (Updated)\",\n    \"is_active\": true,\n    \"is_default\": true\n}",
@@ -1163,7 +1172,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/payment-methods/{{payment_method_id}}"
+            "url": "{{org_base_url}}/payment-methods/{{payment_method_id}}"
           }
         }
       ]
@@ -1177,7 +1186,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/gateway-configs",
+            "url": "{{org_base_url}}/gateway-configs",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"type\": \"worldpay\",\n    \"is_active\": true,\n    \"config\": {\n        \"merchant_entity_id\": \"90648\",\n        \"api_key\": \"90648.1953\",\n        \"api_secret\": \"a65e0449-ca2d-4400-8fb3-4cd55e1a8c1b\",\n        \"webhook_secret\": \"\",\n        \"environment\": \"sandbox\"\n    }\n}",
@@ -1190,7 +1199,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/gateway-configs",
+            "url": "{{org_base_url}}/gateway-configs",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"type\": \"gocardless\",\n    \"is_active\": true,\n    \"config\": {\n        \"access_token\": \"sandbox_xxxxxxxxxxxxxxxx\",\n        \"webhook_secret\": \"\",\n        \"environment\": \"sandbox\"\n    }\n}",
@@ -1203,7 +1212,7 @@
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/order-payments/{{order_payment_id}}/initiate",
+            "url": "{{org_base_url}}/order-payments/{{order_payment_id}}/initiate",
             "body": {
               "mode": "raw",
               "raw": "{\n    \"success_url\": \"http://localhost:3000/checkout/complete\",\n    \"cancel_url\": \"http://localhost:3000/checkout/payment\"\n}",
@@ -1216,7 +1225,7 @@
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/member-payment-methods/{{member_payment_method_id}}"
+            "url": "{{org_base_url}}/member-payment-methods/{{member_payment_method_id}}"
           }
         }
       ]
@@ -1245,55 +1254,55 @@
       "item": [
         {
           "name": "List Tax Rates",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/tax-rates" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/tax-rates" }
         },
         {
           "name": "Show Tax Rate",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/tax-rates/{{tax_rate_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/tax-rates/{{tax_rate_id}}" }
         },
         {
           "name": "List Virtual Forms",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-forms" }
         },
         {
           "name": "Show Virtual Form (with fields)",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms/{{virtual_form_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-forms/{{virtual_form_id}}" }
         },
         {
           "name": "List Virtual Form Fields",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/virtual-forms/{{virtual_form_id}}/fields" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-forms/{{virtual_form_id}}/fields" }
         },
         {
           "name": "List Article Categories",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/article-categories" }
         },
         {
           "name": "Show Article Category",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories/{{article_category_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/article-categories/{{article_category_id}}" }
         },
         {
           "name": "List Articles in Category",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/article-categories/{{article_category_id}}/articles" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/article-categories/{{article_category_id}}/articles" }
         },
         {
           "name": "Show Article",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/articles/{{article_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/articles/{{article_id}}" }
         },
         {
           "name": "List FAQ Categories",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/faq-categories" }
         },
         {
           "name": "Show FAQ Category",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories/{{faq_category_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/faq-categories/{{faq_category_id}}" }
         },
         {
           "name": "List FAQs in Category",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faq-categories/{{faq_category_id}}/faqs" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/faq-categories/{{faq_category_id}}/faqs" }
         },
         {
           "name": "Show FAQ",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/faqs/{{faq_id}}" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/faqs/{{faq_id}}" }
         }
       ]
     },
@@ -1303,40 +1312,40 @@
       "item": [
         {
           "name": "Get Member Config",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/member" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/config/member" }
         },
         {
           "name": "Update Member Config",
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/config/member",
+            "url": "{{org_base_url}}/config/member",
             "body": { "mode": "raw", "raw": "{\n    \"has_junior_members\": true,\n    \"junior_member_max_age\": 18,\n    \"has_membership_numbers\": true,\n    \"does_membership_numbers_auto_increment\": true\n}", "options": { "raw": { "language": "json" } } }
           }
         },
         {
           "name": "Get Subscription Config",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/subscription" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/config/subscription" }
         },
         {
           "name": "Update Subscription Config",
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/config/subscription",
+            "url": "{{org_base_url}}/config/subscription",
             "body": { "mode": "raw", "raw": "{\n    \"renew_annual_subscription_months\": 3,\n    \"auto_renewal_order_days\": 30\n}", "options": { "raw": { "language": "json" } } }
           }
         },
         {
           "name": "Get Financial Config",
-          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/config/financial" }
+          "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/config/financial" }
         },
         {
           "name": "Update Financial Config",
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/config/financial",
+            "url": "{{org_base_url}}/config/financial",
             "body": { "mode": "raw", "raw": "{\n    \"currency\": \"£\",\n    \"vat_status\": false\n}", "options": { "raw": { "language": "json" } } }
           }
         }
@@ -1349,21 +1358,21 @@
         {
           "name": "Accounting Codes",
           "item": [
-            { "name": "List Accounting Codes",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes" } },
-            { "name": "Create Accounting Code", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes", "body": { "mode": "raw", "raw": "{\n    \"code\": \"4100\",\n    \"description\": \"Membership Income\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show Accounting Code",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}" } },
-            { "name": "Update Accounting Code", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}", "body": { "mode": "raw", "raw": "{\n    \"description\": \"Membership Fees\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete Accounting Code", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/accounting-codes/{{accounting_code_id}}" } }
+            { "name": "List Accounting Codes",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/accounting-codes" } },
+            { "name": "Create Accounting Code", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/accounting-codes", "body": { "mode": "raw", "raw": "{\n    \"code\": \"4100\",\n    \"description\": \"Membership Income\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Accounting Code",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/accounting-codes/{{accounting_code_id}}" } },
+            { "name": "Update Accounting Code", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/accounting-codes/{{accounting_code_id}}", "body": { "mode": "raw", "raw": "{\n    \"description\": \"Membership Fees\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Accounting Code", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/accounting-codes/{{accounting_code_id}}" } }
           ]
         },
         {
           "name": "VAT Rates",
           "item": [
-            { "name": "List VATs",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats" } },
-            { "name": "Create VAT",  "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Standard Rate\",\n    \"rate\": 20.0\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show VAT",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}" } },
-            { "name": "Update VAT",  "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}", "body": { "mode": "raw", "raw": "{\n    \"rate\": 25.0\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete VAT",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/vats/{{vat_id}}" } }
+            { "name": "List VATs",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/vats" } },
+            { "name": "Create VAT",  "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/vats", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Standard Rate\",\n    \"rate\": 20.0\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show VAT",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/vats/{{vat_id}}" } },
+            { "name": "Update VAT",  "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/vats/{{vat_id}}", "body": { "mode": "raw", "raw": "{\n    \"rate\": 25.0\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete VAT",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/vats/{{vat_id}}" } }
           ]
         }
       ]
@@ -1375,21 +1384,21 @@
         {
           "name": "Lookups",
           "item": [
-            { "name": "List Lookups",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups" } },
-            { "name": "Create Lookup", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Sport\",\n    \"value\": \"tennis\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show Lookup",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}" } },
-            { "name": "Update Lookup", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}", "body": { "mode": "raw", "raw": "{\n    \"value\": \"squash\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete Lookup", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lookups/{{lookup_id}}" } }
+            { "name": "List Lookups",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lookups" } },
+            { "name": "Create Lookup", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lookups", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Sport\",\n    \"value\": \"tennis\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Lookup",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lookups/{{lookup_id}}" } },
+            { "name": "Update Lookup", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lookups/{{lookup_id}}", "body": { "mode": "raw", "raw": "{\n    \"value\": \"squash\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Lookup", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lookups/{{lookup_id}}" } }
           ]
         },
         {
           "name": "Organisation Lists",
           "item": [
-            { "name": "List Lists",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists" } },
-            { "name": "Create List", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults\",\n    \"description\": \"All active adult members\",\n    \"query\": \"{}\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show List",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}" } },
-            { "name": "Update List", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete List", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/lists/{{list_id}}" } }
+            { "name": "List Lists",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lists" } },
+            { "name": "Create List", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lists", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults\",\n    \"description\": \"All active adult members\",\n    \"query\": \"{}\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show List",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lists/{{list_id}}" } },
+            { "name": "Update List", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lists/{{list_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Active Adults (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete List", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/lists/{{list_id}}" } }
           ]
         }
       ]
@@ -1398,54 +1407,54 @@
     {
       "name": "Org — Communication",
       "item": [
-        { "name": "List Email Templates",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates" } },
+        { "name": "List Email Templates",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/email-templates" } },
         {
           "name": "Create Email Template",
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates",
+            "url": "{{org_base_url}}/email-templates",
             "body": { "mode": "raw", "raw": "{\n    \"name\": \"Welcome Email\",\n    \"subject\": \"Welcome to the club!\",\n    \"content\": \"<p>Dear {{member_name}}, welcome!</p>\"\n}", "options": { "raw": { "language": "json" } } }
           }
         },
-        { "name": "Show Email Template",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}" } },
+        { "name": "Show Email Template",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/email-templates/{{email_template_id}}" } },
         {
           "name": "Update Email Template",
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}",
+            "url": "{{org_base_url}}/email-templates/{{email_template_id}}",
             "body": { "mode": "raw", "raw": "{\n    \"subject\": \"Welcome — updated subject\"\n}", "options": { "raw": { "language": "json" } } }
           }
         },
-        { "name": "Delete Email Template",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/email-templates/{{email_template_id}}" } }
+        { "name": "Delete Email Template",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/email-templates/{{email_template_id}}" } }
       ]
     },
 
     {
       "name": "Org — Forms",
       "item": [
-        { "name": "List Virtual Records",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records" } },
+        { "name": "List Virtual Records",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-records" } },
         {
           "name": "Create Virtual Record",
           "request": {
             "method": "POST",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records",
+            "url": "{{org_base_url}}/virtual-records",
             "body": { "mode": "raw", "raw": "{\n    \"virtual_form_id\": \"{{virtual_form_id}}\",\n    \"member_id\": \"{{member_id}}\",\n    \"data\": { \"emergency_contact\": \"Jane Doe — 07700900000\" }\n}", "options": { "raw": { "language": "json" } } }
           }
         },
-        { "name": "Show Virtual Record",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}" } },
+        { "name": "Show Virtual Record",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-records/{{virtual_record_id}}" } },
         {
           "name": "Update Virtual Record",
           "request": {
             "method": "PUT",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}",
+            "url": "{{org_base_url}}/virtual-records/{{virtual_record_id}}",
             "body": { "mode": "raw", "raw": "{\n    \"data\": { \"emergency_contact\": \"John Smith — 07700900001\" }\n}", "options": { "raw": { "language": "json" } } }
           }
         },
-        { "name": "Delete Virtual Record",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/virtual-records/{{virtual_record_id}}" } }
+        { "name": "Delete Virtual Record",  "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/virtual-records/{{virtual_record_id}}" } }
       ]
     },
 
@@ -1455,30 +1464,30 @@
         {
           "name": "Product Categories",
           "item": [
-            { "name": "List Product Categories",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories" } },
-            { "name": "Create Product Category", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Clothing\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show Product Category",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}" } },
-            { "name": "Update Product Category", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Apparel\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete Product Category", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/product-categories/{{product_category_id}}" } }
+            { "name": "List Product Categories",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/product-categories" } },
+            { "name": "Create Product Category", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/product-categories", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Clothing\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Product Category",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/product-categories/{{product_category_id}}" } },
+            { "name": "Update Product Category", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/product-categories/{{product_category_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Apparel\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product Category", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/product-categories/{{product_category_id}}" } }
           ]
         },
         {
           "name": "Products",
           "item": [
-            { "name": "List Products",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products" } },
-            { "name": "Create Product", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt\",\n    \"code\": \"TSHIRT-01\",\n    \"description\": \"Official club t-shirt\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Show Product",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}" } },
-            { "name": "Update Product", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete Product", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}" } }
+            { "name": "List Products",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products" } },
+            { "name": "Create Product", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt\",\n    \"code\": \"TSHIRT-01\",\n    \"description\": \"Official club t-shirt\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Show Product",   "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}" } },
+            { "name": "Update Product", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Club T-Shirt (Updated)\"\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}" } }
           ]
         },
         {
           "name": "Product Options",
           "item": [
-            { "name": "List Product Options",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options" } },
-            { "name": "Create Product Option", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Small\",\n    \"code\": \"TSHIRT-S\",\n    \"available\": true\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Update Product Option", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options/{{product_option_id}}", "body": { "mode": "raw", "raw": "{\n    \"available\": false\n}", "options": { "raw": { "language": "json" } } } } },
-            { "name": "Delete Product Option", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{base_url}}/organisations/{{organisation_id}}/products/{{product_id}}/options/{{product_option_id}}" } }
+            { "name": "List Product Options",  "request": { "method": "GET",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}/options" } },
+            { "name": "Create Product Option", "request": { "method": "POST",   "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}/options", "body": { "mode": "raw", "raw": "{\n    \"name\": \"Small\",\n    \"code\": \"TSHIRT-S\",\n    \"available\": true\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Update Product Option", "request": { "method": "PUT",    "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}/options/{{product_option_id}}", "body": { "mode": "raw", "raw": "{\n    \"available\": false\n}", "options": { "raw": { "language": "json" } } } } },
+            { "name": "Delete Product Option", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": "{{org_base_url}}/products/{{product_id}}/options/{{product_option_id}}" } }
           ]
         }
       ]
@@ -1517,6 +1526,224 @@
             "body": {
               "mode": "raw",
               "raw": "{\n    \"transactionReference\": \"<tracking_token>\",\n    \"outcome\": \"authorized\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Subscription Categories",
+      "item": [
+        {
+          "name": "List Subscription Categories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories"
+          }
+        },
+        {
+          "name": "Create Subscription Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Membership\",\n    \"sort_order\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Show Subscription Category",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories/{{subscription_category_id}}"
+          }
+        },
+        {
+          "name": "Update Subscription Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories/{{subscription_category_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Membership (Updated)\",\n    \"sort_order\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Subscription Category",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories/{{subscription_category_id}}"
+          }
+        },
+        {
+          "name": "Sync Subscriptions in Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/subscription-categories/{{subscription_category_id}}/subscriptions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"subscription_ids\": [\"{{subscription_id}}\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Member Subscriptions",
+      "item": [
+        {
+          "name": "List Member Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/member-subscriptions"
+          }
+        },
+        {
+          "name": "Show Member Subscription",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/member-subscriptions/{{member_subscription_id}}"
+          }
+        },
+        {
+          "name": "List Member's Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/members/{{member_id}}/subscriptions"
+          }
+        },
+        {
+          "name": "Cancel Member Subscription",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/member-subscriptions/{{member_subscription_id}}"
+          }
+        },
+        {
+          "name": "Renewal Queue (Org)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/renewals"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Orders",
+      "item": [
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/orders"
+          }
+        },
+        {
+          "name": "Show Order",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/orders/{{order_id}}"
+          }
+        },
+        {
+          "name": "List Order Subscription Items",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/orders/{{order_id}}/subscription-items"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Org — Audit Logs",
+      "item": [
+        {
+          "name": "List Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/audit-logs"
+          }
+        },
+        {
+          "name": "Show Audit Log Entry",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/audit-logs/{{audit_log_id}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Portal — Member (self-service)",
+      "item": [
+        {
+          "name": "My Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/portal/subscriptions"
+          }
+        },
+        {
+          "name": "My Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/portal/orders"
+          }
+        },
+        {
+          "name": "My Groups",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/portal/groups"
+          }
+        },
+        {
+          "name": "My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/portal/profile"
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{org_base_url}}/portal/profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\",\n    \"mobile_phone\": \"+447700900123\",\n    \"date_of_birth\": \"1990-06-15\"\n}",
               "options": { "raw": { "language": "json" } }
             }
           }

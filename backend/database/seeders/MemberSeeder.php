@@ -17,8 +17,8 @@ class MemberSeeder extends Seeder
         $carol = User::where('email', 'carol@example.com')->firstOrFail();
         $dave  = User::where('email', 'dave@example.com')->firstOrFail();
 
-        $tennis  = Organisation::where('seo_name', 'riverside-tennis')->firstOrFail();
-        $cycling = Organisation::where('seo_name', 'northside-cycling')->firstOrFail();
+        $tennis  = Organisation::where('seo_name', 'river')->firstOrFail();
+        $cycling = Organisation::where('seo_name', 'north')->firstOrFail();
 
         // ── Additional members for Riverside Tennis ───────────────────────────
         $carolTennis = $this->addMember($carol, $tennis, 'Carol', 'Smith', 'committee');

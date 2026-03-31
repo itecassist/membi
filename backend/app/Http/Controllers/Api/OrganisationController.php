@@ -7,6 +7,7 @@ use App\Domain\Organisation\Services\OrganisationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Organisation\StoreOrganisationRequest;
 use App\Http\Requests\Organisation\UpdateOrganisationRequest;
+use App\Http\Resources\OrganisationListResource;
 use App\Http\Resources\OrganisationResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -17,7 +18,7 @@ class OrganisationController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        return OrganisationResource::collection($this->service->list());
+        return OrganisationListResource::collection($this->service->list());
     }
 
     public function store(StoreOrganisationRequest $request): JsonResponse

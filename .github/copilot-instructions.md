@@ -8,7 +8,8 @@
 ## Big Picture
 Membix is a SaaS membership management platform for clubs and societies.
 - **Spec**: `docs/spec.md` — primary source of truth for features and behaviour.
-- **Tech stack**: Laravel 11 (PHP 8.3), PostgreSQL, Next.js (App Router), Tailwind CSS.
+- **Tech stack**: Laravel 11 (PHP 8.3), **PostgreSQL 16** (local dev + prod), Next.js (App Router), Tailwind CSS.
+- **DB note**: Local dev uses PostgreSQL 16 on Windows (service: `postgresql-x64-16`). Credentials in `.env`: `postgres` / `root`. Use `php artisan migrate` as normal. No special cross-engine concerns — all migrations are PostgreSQL-native. Column `->change()` works via Laravel 11 native support.
 - **Auth**: Laravel Sanctum (token-based API auth + 2FA). No external IAM server.
 - **Payments**: GoCardless (Direct Debit) + WorldPay (card payments). Both in scope.
 - **Deployment**: Docker (prod). Laravel dev server + Vite for local dev — NO WSL/Docker requirement for development.
@@ -17,9 +18,12 @@ Membix is a SaaS membership management platform for clubs and societies.
 ```
 membix/
   backend/          ← Laravel 11 API (DDD structure)
-  frontend/         ← Next.js App Router (to be created)
+  frontend/         ← Next.js App Router (App Router, Tailwind CSS v4, Zustand)
+  mcp-server/       ← MCP server providing project context tools (run via VS Code MCP config, NOT manually)
   docs/
-    spec.md         ← Master product spec
+    spec.md                  ← Master product spec
+    frontend-reference.md    ← Phase 3 reference: route map, auth, API endpoints, what to build
+    database-reference.md    ← Schema comparison: Prisma (membi-gitlab) → Laravel (membix), gaps
 ```
 
 ## Backend Architecture (DDD)
@@ -98,7 +102,7 @@ Based on spec.md and membi-gitlab's SubscriptionType/SubscriptionTypeOption/Subs
 - Reference tests: `membi-gitlab/apps/api/__tests__/` for acceptance criteria patterns
 
 ## Current Build Phase
-**Phase 1 — Foundation** (current focus):
+**Phase 1 — Foundation** (COMPLETE):
 - [x] DDD folder structure
 - [x] Schema fixes (new corrective migrations)
 - [x] Groups migration + model
@@ -107,15 +111,43 @@ Based on spec.md and membi-gitlab's SubscriptionType/SubscriptionTypeOption/Subs
 - [x] Organisation + Member CRUD
 - [x] Subscription type + price option CRUD
 
-**Phase 2 — Core transaction flow**:
+**Phase 2 — Core transaction flow** (COMPLETE):
 - [x] Checkout flow
 - [x] Orders + order items
 - [x] GoCardless integration
 - [x] WorldPay integration
 - [x] Renewal jobs
 
-**Phase 3 — Admin & Member portals**:
-- [ ] Next.js frontend (admin + member)
+**Phase 3 — Admin & Member portals** (CURRENT FOCUS):
+See `docs/frontend-reference.md` for complete route map, API endpoint mapping, and what needs to be built.
+
+Frontend stack already started: Next.js App Router, Tailwind CSS v4, Zustand, Axios, React Hook Form + Zod.
+
+Current frontend state:
+- [x] Public marketing site shell (SiteHeader, SiteFooter, homepage)
+- [x] Auth routes (`/login`, `/register`)
+- [x] Super-admin portal (`/admin/*`) — org CRUD, member CRUD, subscription CRUD
+- [x] Org admin portal (`/manage/[orgId]/*`) — dashboard, members, subscriptions, orders, settings
+- [x] Member portal shell (`/portal/*`) — stub pages only
+
+Still to build (see `docs/frontend-reference.md` section 11):
+- [ ] Member portal: full subscriptions page (renew, swap, payment method change)
+- [ ] Member portal: orders list + detail
+- [ ] Member portal: group management
+- [ ] Member portal: full profile editing (name, DOB, phone, addresses)
+- [ ] Member portal: settings (account, password change)
+- [ ] Basket + checkout state machine (10-step backend-driven flow)
+- [ ] Public subscription browsing page
+- [ ] Auth: email verification flow, forgot/reset password
+- [ ] Org admin: member detail + edit
+- [ ] Org admin: subscription instances list + renewals queues
+- [ ] Org admin: audit logs
+
+Database gaps (see `docs/database-reference.md` section 10):
+- [ ] `subscription_categories` + pivot table
+- [ ] `subscription_type_billing_methods` (link subscription types to allowed payment methods)
+- [ ] `subscription_instance_allocations` (group subscription member allocation)
+- [ ] `pricing_config jsonb` column on `subscription_price_options`
 
 **Phase 4 — Events + Beta**:
 - [ ] Events, bookings, sessions

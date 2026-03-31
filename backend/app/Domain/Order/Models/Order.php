@@ -18,11 +18,16 @@ class Order extends Model
     protected $fillable = [
         'member_id',
         'organisation_id',
+        'basket_id',
         'name',
         'email',
         'payment_method_id',
         'payment_reference',
         'status',
+        'is_subscription_order',
+        'provisioning_status',
+        'prev_order_id',
+        'next_order_id',
         'date_placed',
         'date_finished',
         'comments',
@@ -34,10 +39,11 @@ class Order extends Model
     protected function casts(): array
     {
         return [
-            'date_placed'  => 'date',
-            'date_finished' => 'date',
-            'tax_total'    => 'decimal:2',
-            'total'        => 'decimal:2',
+            'date_placed'            => 'date',
+            'date_finished'          => 'date',
+            'tax_total'              => 'decimal:2',
+            'total'                  => 'decimal:2',
+            'is_subscription_order'  => 'boolean',
         ];
     }
 
@@ -54,6 +60,16 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function subscriptionItems(): HasMany
+    {
+        return $this->hasMany(\App\Domain\Order\Models\OrderSubscriptionItem::class);
+    }
+
+    public function basket(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Domain\Checkout\Models\Basket::class);
     }
 
     public function payments(): HasMany

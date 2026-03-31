@@ -15,21 +15,37 @@ class SubscriptionPriceOption extends Model
 
     protected $fillable = [
         'subscription_id',
-        'name',
+        'label',
         'eligibility',
         'pricing_type',
+        'pricing_config',
         'price',
         'price_min',
         'price_max',
+        'currency_code',
+        'setup_price',
+        'instance_type',
+        'max_members',
+        'use_pro_rata',
+        'allow_instalments',
+        'offer_trial',
+        'rollover_period_days',
+        'is_active',
         'published',
     ];
 
     protected function casts(): array
     {
         return [
-            'price'     => 'decimal:2',
-            'price_min' => 'decimal:2',
-            'price_max' => 'decimal:2',
+            'price'               => 'decimal:2',
+            'price_min'           => 'decimal:2',
+            'price_max'           => 'decimal:2',
+            'setup_price'         => 'decimal:2',
+            'pricing_config'      => 'array',
+            'use_pro_rata'        => 'boolean',
+            'allow_instalments'   => 'boolean',
+            'offer_trial'         => 'boolean',
+            'is_active'           => 'boolean',
         ];
     }
 

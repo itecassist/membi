@@ -20,8 +20,9 @@ class Subscription extends Model
         'description',
         'virtual_form_id',
         'document_id',
-        'membership_type',
-        'period',
+        'is_membership',
+        'period_type',
+        'period_count',
         'renewal_type',
         'pricing_type',
         'published',
@@ -31,13 +32,23 @@ class Subscription extends Model
     protected function casts(): array
     {
         return [
+            'is_membership'  => 'boolean',
             'is_joining_fee' => 'boolean',
+            'period_count'   => 'integer',
         ];
     }
 
     public function organisation(): BelongsTo
     {
         return $this->belongsTo(\App\Domain\Organisation\Models\Organisation::class);
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            SubscriptionCategory::class,
+            'subscription_category_subscription'
+        );
     }
 
     public function priceOptions(): HasMany

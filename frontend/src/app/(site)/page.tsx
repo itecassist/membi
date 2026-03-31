@@ -1,6 +1,24 @@
 import Link from 'next/link';
+import { getOrgFrontendUrl } from '@/lib/subdomain';
+import type { Organisation } from '@/types/api';
 
-export default function HomePage() {
+async function fetchOrganisations(): Promise<Organisation[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'}/organisations`,
+      { cache: 'no-store' }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const organisations = await fetchOrganisations();
+
   return (
     <>
       {/* Hero */}
@@ -30,6 +48,98 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Organisation directory */}
+      {organisations.length > 0 && (
+        <section className="py-20 px-4 bg-gray-50">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">Find your organisation</h2>
+              <p className="text-gray-500 text-lg">
+                Select your club or society to sign in to your member portal.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {organisations.map((org) => (
+                <a
+                  key={org.id}
+                  href={`${getOrgFrontendUrl(org.seo_name)}/login`}
+                  className="group bg-white rounded-xl border border-gray-200 p-6 hover:border-primary-400 hover:shadow-md transition-all flex flex-col"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    {org.logo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={org.logo} alt={org.name} className="w-10 h-10 rounded-lg object-cover" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center shrink-0">
+                        <span className="text-primary-700 font-bold text-sm uppercase">
+                          {org.seo_name.slice(0, 2)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-900 truncate group-hover:text-primary-600 transition-colors">
+                        {org.name}
+                      </h3>
+                      <p className="text-xs text-gray-400">{org.seo_name}.membix</p>
+                    </div>
+                  </div>
+                  {org.description && (
+                    <p className="text-sm text-gray-500 line-clamp-2 mb-4">{org.description}</p>
+                  )}
+                  <div className="mt-auto flex items-center text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                    Go to portal
+                    <svg className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Feature highlights */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-14">
+            Everything your organisation needs
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((f) => (
+              <div key={f.title} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div className="w-11 h-11 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    {f.icon}
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA banner */}
+      <section className="bg-primary-600 py-16 px-4">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
+          <p className="text-primary-100 mb-8 text-lg">
+            Join hundreds of organisations already using Membix.
+          </p>
+          <Link
+            href="/register"
+            className="inline-block px-8 py-3.5 bg-white text-primary-600 rounded-lg font-semibold text-lg hover:bg-primary-50 transition-colors shadow-md"
+          >
+            Create your free account
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}
 
       {/* Feature highlights */}
       <section className="py-20 px-4">

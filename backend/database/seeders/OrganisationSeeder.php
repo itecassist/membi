@@ -18,8 +18,9 @@ class OrganisationSeeder extends Seeder
         $bob   = User::where('email', 'bob@example.com')->firstOrFail();
 
         // ── Organisation 1: Riverside Tennis Club (owned by Alice) ───────────
+        // seo_name = first 5 chars of org name, lowercased → 'river'
         $tennis = Organisation::firstOrCreate(
-            ['seo_name' => 'riverside-tennis'],
+            ['seo_name' => 'river'],
             [
                 'name'      => 'Riverside Tennis Club',
                 'email'     => 'info@riverside-tennis.example.com',
@@ -31,8 +32,9 @@ class OrganisationSeeder extends Seeder
         $this->setupOrg($tennis, $alice, $admin);
 
         // ── Organisation 2: Northside Cycling Club (owned by Bob) ─────────────
+        // seo_name = first 5 chars of org name, lowercased → 'north'
         $cycling = Organisation::firstOrCreate(
-            ['seo_name' => 'northside-cycling'],
+            ['seo_name' => 'north'],
             [
                 'name'      => 'Northside Cycling Club',
                 'email'     => 'info@northside-cycling.example.com',

@@ -7,18 +7,26 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Sets Spatie's team context from the {organisation} route parameter so that
- * all role/permission lookups in downstream controllers are automatically
- * scoped to the correct organisation. Must run after route model binding.
+ * Sets Spatie's team context so that all role/permission lookups are scoped
+ * to the correct organisation. Resolves from:
+ *   1. {subdomain} route param (subdomain-based routing — primary path)
+ *   2. {organisation} route param (path-based routing — admin routes fallback)
  */
 class SetOrganisationTeam
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $organisation = $request->route('organisation');
+        $organisation = $request->route('subdomain') ?? $request->route('organisation');
 
         if ($organisation) {
             setPermissionsTeamId($organisation->id);
+
+            // Controllers are typed `Organisation $organisation`. When routing via
+            // subdomain there is no {organisation} path segment, so we inject it
+            // as a route parameter here so all controllers continue to work unchanged.
+            if ($request->route('subdomain') && ! $request->route('organisation')) {
+                $request->route()->setParameter('organisation', $organisation);
+            }
         }
 
         return $next($request);

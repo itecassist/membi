@@ -16,12 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * Returns 403 if the user is not a member of the organisation.
  * Must run after auth:sanctum and SetOrganisationTeam.
+ * Resolves organisation from {subdomain} (domain routing) or {organisation} (path routing).
  */
 class ResolveMember
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $organisation = $request->route('organisation');
+        $organisation = $request->route('subdomain') ?? $request->route('organisation');
 
         if (! $organisation) {
             return $next($request);

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import api from '@/lib/api';
+import api, { createOrgApiClient } from '@/lib/api';
 import { getToken, setToken, clearToken } from '@/lib/auth';
+import { getOrgSubdomain, getOrgApiBaseUrl } from '@/lib/subdomain';
 import type { User, Organisation, LoginPayload, RegisterPayload } from '@/types/api';
 
 interface AuthState {
@@ -18,6 +19,12 @@ interface AuthState {
   setCurrentOrganisation: (org: Organisation) => void;
 }
 
+/** Returns an org-subdomain-scoped client when on a subdomain, otherwise the main API client. */
+function getClient() {
+  const subdomain = getOrgSubdomain();
+  return subdomain ? createOrgApiClient(getOrgApiBaseUrl(subdomain)) : api;
+}
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: getToken(),
@@ -25,22 +32,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   currentOrganisation: null,
 
   login: async (payload) => {
-    const { data } = await api.post<{ data: User; token: string }>('/auth/login', payload);
+    const client = getClient();
+    const { data } = await client.post<{ data: User; token: string }>('/auth/login', payload);
     setToken(data.token);
     set({ token: data.token, user: data.data });
     await get().loadOrganisations();
   },
 
   register: async (payload) => {
-    const { data } = await api.post<{ data: User; token: string }>('/auth/register', payload);
+    const client = getClient();
+    const { data } = await client.post<{ data: User; token: string }>('/auth/register', payload);
     setToken(data.token);
     set({ token: data.token, user: data.data });
     await get().loadOrganisations();
   },
 
   logout: async () => {
+    const client = getClient();
     try {
-      await api.post('/auth/logout');
+      await client.post('/auth/logout');
     } finally {
       clearToken();
       set({ user: null, token: null, organisations: [], currentOrganisation: null });
@@ -48,12 +58,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   loadUser: async () => {
-    const { data } = await api.get<{ data: User }>('/auth/me');
+    const client = getClient();
+    const { data } = await client.get<{ data: User }>('/auth/me');
     set({ user: data.data });
   },
 
   loadOrganisations: async () => {
-    const { data } = await api.get<{ data: { organisation: Organisation; member: unknown }[] }>('/auth/organisations');
+    const client = getClient();
+    const { data } = await client.get<{ data: { organisation: Organisation; member: unknown }[] }>('/auth/organisations');
     const orgs = data.data.map((item) => item.organisation);
     set({
       organisations: orgs,

@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { extractSubdomainFromHost } from '@/lib/subdomain';
 
 const PUBLIC_PATHS = ['/', '/login', '/register', '/pricing', '/features', '/help', '/about', '/contact', '/privacy', '/terms', '/docs', '/support'];
 const PROTECTED_PREFIX = ['/admin', '/manage', '/portal'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = request.headers.get('host') || '';
   const token = request.cookies.get('membix_token')?.value
     ?? request.headers.get('x-membix-token');
 
-  // Check localStorage-based token via a cookie we mirror on login
-  // Next.js middleware can't access localStorage, so we use a non-httpOnly cookie
-  // as a session indicator (actual Bearer token stays in localStorage)
   const hasSession = Boolean(token);
+  const isOnSubdomain = Boolean(extractSubdomainFromHost(host));
 
   const isPublicPath = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
   const isAuthOnlyPath = ['/login', '/register'].some((p) => pathname === p || pathname.startsWith(p + '/'));
@@ -24,8 +24,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect authenticated users away from login/register
-  if (isAuthOnlyPath && hasSession) {
+  // On main domain: redirect authenticated users away from login/register → admin dashboard
+  // On org subdomain: skip this redirect — let the login page handle post-auth navigation
+  if (isAuthOnlyPath && hasSession && !isOnSubdomain) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
 

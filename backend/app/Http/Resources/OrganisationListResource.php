@@ -14,6 +14,7 @@ class OrganisationListResource extends JsonResource
             'organisation_id' => $this->organisation_id,
             'name'            => $this->name,
             'description'     => $this->description,
+            'seo_name'       => $this->seo_name,
             'query'           => $this->query,
             'created_at'      => $this->created_at,
             'updated_at'      => $this->updated_at,
