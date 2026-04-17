@@ -43,11 +43,11 @@ Route::prefix('webhooks')->group(function () {
     Route::post('worldpay/{organisation}',   [PaymentWebhookController::class, 'worldpay']);
 });
 
-// ── Subdomain-scoped routes ───────────────────────────────────────────────────
-// All org-specific routes live under {seo_name}.{APP_DOMAIN}.
-// The {subdomain} parameter is resolved to an Organisation model via seo_name
-// in AppServiceProvider::boot() — no {organisation} path segment needed.
-Route::domain('{subdomain}.' . config('app.domain'))->group(function () {
+// ── Org-scoped routes ─────────────────────────────────────────────────────────
+// All org-specific routes live under /{orgSlug}/ path prefix.
+// The {orgSlug} parameter is resolved to an Organisation model via seo_name
+// in AppServiceProvider::boot() — no domain configuration required.
+Route::prefix('{orgSlug}')->group(function () {
 
     // ── Auth (entry point — always on the org subdomain) ─────────────────────
     Route::prefix('auth')->group(function () {

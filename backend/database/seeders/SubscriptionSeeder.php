@@ -21,27 +21,27 @@ class SubscriptionSeeder extends Seeder
             ['organisation_id' => $tennis->id, 'name' => 'Annual Membership'],
             [
                 'description'    => 'Full playing membership for the calendar year.',
-                'membership_type' => 'individual',
-                'period'         => 'year',
+                'is_membership'  => true,
+                'period_type'    => 'year',
                 'renewal_type'   => 'manual',
                 'pricing_type'   => 'flat',
-                'published'      => true,
+                'published'      => 'published',
                 'is_joining_fee' => false,
             ]
         );
 
         foreach ([
-            ['name' => 'Adult',  'eligibility' => 'adult',      'price' => 120.00],
-            ['name' => 'Junior', 'eligibility' => 'junior',     'price' => 45.00],
-            ['name' => 'Senior', 'eligibility' => 'individual', 'price' => 80.00],
+            ['label' => 'Adult',  'eligibility' => 'adult',      'price' => 120.00],
+            ['label' => 'Junior', 'eligibility' => 'junior',     'price' => 45.00],
+            ['label' => 'Senior', 'eligibility' => 'individual', 'price' => 80.00],
         ] as $option) {
             SubscriptionPriceOption::firstOrCreate(
-                ['subscription_id' => $annualMembership->id, 'name' => $option['name']],
+                ['subscription_id' => $annualMembership->id, 'label' => $option['label']],
                 [
                     'eligibility'  => $option['eligibility'],
                     'pricing_type' => 'flat',
                     'price'        => $option['price'],
-                    'published'    => true,
+                    'published'    => 'published',
                 ]
             );
         }
@@ -50,23 +50,23 @@ class SubscriptionSeeder extends Seeder
         $familyMembership = Subscription::firstOrCreate(
             ['organisation_id' => $tennis->id, 'name' => 'Family Membership'],
             [
-                'description'     => 'Covers up to 2 adults + dependent children.',
-                'membership_type' => 'group',
-                'period'          => 'year',
-                'renewal_type'    => 'auto_renew',
-                'pricing_type'    => 'family',
-                'published'       => true,
-                'is_joining_fee'  => false,
+                'description'    => 'Covers up to 2 adults + dependent children.',
+                'is_membership'  => true,
+                'period_type'    => 'year',
+                'renewal_type'   => 'auto_renew',
+                'pricing_type'   => 'family',
+                'published'      => 'published',
+                'is_joining_fee' => false,
             ]
         );
 
         SubscriptionPriceOption::firstOrCreate(
-            ['subscription_id' => $familyMembership->id, 'name' => 'Family'],
+            ['subscription_id' => $familyMembership->id, 'label' => 'Family'],
             [
                 'eligibility'  => 'family',
                 'pricing_type' => 'flat',
                 'price'        => 220.00,
-                'published'    => true,
+                'published'    => 'published',
             ]
         );
 
@@ -75,22 +75,22 @@ class SubscriptionSeeder extends Seeder
             ['organisation_id' => $tennis->id, 'name' => 'Joining Fee'],
             [
                 'description'    => 'One-time fee for new members.',
-                'membership_type' => 'individual',
-                'period'         => 'none',
+                'is_membership'  => false,
+                'period_type'    => 'none',
                 'renewal_type'   => 'not_renewable',
                 'pricing_type'   => 'flat',
-                'published'      => true,
+                'published'      => 'published',
                 'is_joining_fee' => true,
             ]
         );
 
         SubscriptionPriceOption::firstOrCreate(
-            ['subscription_id' => $joiningFee->id, 'name' => 'Standard'],
+            ['subscription_id' => $joiningFee->id, 'label' => 'Standard'],
             [
                 'eligibility'  => 'individual',
                 'pricing_type' => 'flat',
                 'price'        => 25.00,
-                'published'    => true,
+                'published'    => 'published',
             ]
         );
 
@@ -100,27 +100,27 @@ class SubscriptionSeeder extends Seeder
             ['organisation_id' => $cycling->id, 'name' => 'Annual Membership'],
             [
                 'description'    => 'Annual club membership with British Cycling affiliation.',
-                'membership_type' => 'individual',
-                'period'         => 'year',
+                'is_membership'  => true,
+                'period_type'    => 'year',
                 'renewal_type'   => 'auto_renew',
                 'pricing_type'   => 'flat',
-                'published'      => true,
+                'published'      => 'published',
                 'is_joining_fee' => false,
             ]
         );
 
         foreach ([
-            ['name' => 'Adult',         'eligibility' => 'adult',      'price' => 55.00],
-            ['name' => 'Junior',        'eligibility' => 'junior',     'price' => 20.00],
-            ['name' => 'Concessionary', 'eligibility' => 'individual', 'price' => 30.00],
+            ['label' => 'Adult',         'eligibility' => 'adult',      'price' => 55.00],
+            ['label' => 'Junior',        'eligibility' => 'junior',     'price' => 20.00],
+            ['label' => 'Concessionary', 'eligibility' => 'individual', 'price' => 30.00],
         ] as $option) {
             SubscriptionPriceOption::firstOrCreate(
-                ['subscription_id' => $cyclingAnnual->id, 'name' => $option['name']],
+                ['subscription_id' => $cyclingAnnual->id, 'label' => $option['label']],
                 [
                     'eligibility'  => $option['eligibility'],
                     'pricing_type' => 'flat',
                     'price'        => $option['price'],
-                    'published'    => true,
+                    'published'    => 'published',
                 ]
             );
         }
@@ -130,22 +130,22 @@ class SubscriptionSeeder extends Seeder
             ['organisation_id' => $cycling->id, 'name' => 'Monthly Rolling'],
             [
                 'description'    => 'Pay monthly, cancel anytime.',
-                'membership_type' => 'individual',
-                'period'         => 'month',
+                'is_membership'  => true,
+                'period_type'    => 'month',
                 'renewal_type'   => 'auto_renew',
                 'pricing_type'   => 'flat',
-                'published'      => true,
+                'published'      => 'published',
                 'is_joining_fee' => false,
             ]
         );
 
         SubscriptionPriceOption::firstOrCreate(
-            ['subscription_id' => $monthly->id, 'name' => 'Monthly'],
+            ['subscription_id' => $monthly->id, 'label' => 'Monthly'],
             [
                 'eligibility'  => 'individual',
                 'pricing_type' => 'flat',
                 'price'        => 6.00,
-                'published'    => true,
+                'published'    => 'published',
             ]
         );
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import api, { createOrgApiClient } from '@/lib/api';
 import { getToken, setToken, clearToken } from '@/lib/auth';
-import { getOrgSubdomain, getOrgApiBaseUrl } from '@/lib/subdomain';
+import { getOrgSlugFromPath, getOrgApiBaseUrl } from '@/lib/subdomain';
 import type { User, Organisation, LoginPayload, RegisterPayload } from '@/types/api';
 
 interface AuthState {
@@ -19,10 +19,10 @@ interface AuthState {
   setCurrentOrganisation: (org: Organisation) => void;
 }
 
-/** Returns an org-subdomain-scoped client when on a subdomain, otherwise the main API client. */
+/** Returns an org-scoped client when on an org path, otherwise the main API client. */
 function getClient() {
-  const subdomain = getOrgSubdomain();
-  return subdomain ? createOrgApiClient(getOrgApiBaseUrl(subdomain)) : api;
+  const slug = getOrgSlugFromPath();
+  return slug ? createOrgApiClient(getOrgApiBaseUrl(slug)) : api;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({

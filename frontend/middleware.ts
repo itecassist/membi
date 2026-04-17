@@ -1,32 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { extractSubdomainFromHost } from '@/lib/subdomain';
 
-const PUBLIC_PATHS = ['/', '/login', '/register', '/pricing', '/features', '/help', '/about', '/contact', '/privacy', '/terms', '/docs', '/support'];
-const PROTECTED_PREFIX = ['/admin', '/manage', '/portal'];
+// Org-scoped paths: /[orgSlug]/manage/*, /[orgSlug]/portal/*
+// Main protected paths: /admin/*
+const PROTECTED_PREFIX = ['/admin'];
+
+/** Returns the org slug from a path like /river/login, /river/manage, /river/portal */
+function getOrgSlugFromPathname(pathname: string): string | null {
+  const parts = pathname.split('/').filter(Boolean);
+  if (parts.length >= 2 && ['login', 'portal', 'manage'].includes(parts[1])) {
+    return parts[0];
+  }
+  return null;
+}
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const host = request.headers.get('host') || '';
   const token = request.cookies.get('membix_token')?.value
     ?? request.headers.get('x-membix-token');
 
   const hasSession = Boolean(token);
-  const isOnSubdomain = Boolean(extractSubdomainFromHost(host));
+  const orgSlug = getOrgSlugFromPathname(pathname);
 
-  const isPublicPath = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
-  const isAuthOnlyPath = ['/login', '/register'].some((p) => pathname === p || pathname.startsWith(p + '/'));
+  const isMainAuthPath = ['/login', '/register'].some((p) => pathname === p || pathname.startsWith(p + '/'));
   const isProtectedPath = PROTECTED_PREFIX.some((p) => pathname === p || pathname.startsWith(p + '/'));
 
-  // Redirect unauthenticated users away from protected routes
+  // Protect /admin/* routes
   if (isProtectedPath && !hasSession) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // On main domain: redirect authenticated users away from login/register → admin dashboard
-  // On org subdomain: skip this redirect — let the login page handle post-auth navigation
-  if (isAuthOnlyPath && hasSession && !isOnSubdomain) {
+  // Protect org-scoped /[orgSlug]/manage/* and /[orgSlug]/portal/* routes
+  if (orgSlug) {
+    const isOrgProtected = pathname.includes('/manage') || pathname.includes('/portal');
+    if (isOrgProtected && !hasSession) {
+      const loginUrl = new URL(`/${orgSlug}/login`, request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // Redirect authenticated users away from main /login and /register
+  if (isMainAuthPath && hasSession) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
 

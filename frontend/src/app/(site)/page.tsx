@@ -4,10 +4,13 @@ import type { Organisation } from '@/types/api';
 
 async function fetchOrganisations(): Promise<Organisation[]> {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'}/organisations`,
-      { cache: 'no-store' }
-    );
+    // Use the internal Docker URL for SSR (container-to-container), falling back to the
+    // public API URL for local dev outside Docker.
+    const baseUrl =
+      process.env.INTERNAL_API_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      'http://127.0.0.1:8000/api';
+    const res = await fetch(`${baseUrl}/organisations`, { cache: 'no-store' });
     if (!res.ok) return [];
     const json = await res.json();
     return json.data ?? [];
@@ -141,46 +144,6 @@ export default async function HomePage() {
   );
 }
 
-      {/* Feature highlights */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-14">
-            Everything your organisation needs
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((f) => (
-              <div key={f.title} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div className="w-11 h-11 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    {f.icon}
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA banner */}
-      <section className="bg-primary-600 py-16 px-4">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
-          <p className="text-primary-100 mb-8 text-lg">
-            Join hundreds of organisations already using Membix.
-          </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-3.5 bg-white text-primary-600 rounded-lg font-semibold text-lg hover:bg-primary-50 transition-colors shadow-md"
-          >
-            Create your free account
-          </Link>
-        </div>
-      </section>
-    </>
-  );
-}
 
 const features = [
   {

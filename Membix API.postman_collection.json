@@ -42,8 +42,8 @@
     { "key": "order_sub_item_id",      "value": "" },
     { "key": "subscription_category_id", "value": "" },
     { "key": "audit_log_id",           "value": "" },
-    { "key": "subdomain",    "value": "river" },
-    { "key": "org_base_url", "value": "http://{{subdomain}}.localhost:8000/api" }
+    { "key": "org_slug",     "value": "river" },
+    { "key": "org_base_url", "value": "http://127.0.0.1:8000/api/{{org_slug}}" }
   ],
   "auth": {
     "type": "bearer",

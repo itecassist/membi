@@ -16,10 +16,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Resolve the {subdomain} route parameter to an Organisation model by seo_name.
-        // This allows Route::domain('{subdomain}.example.com') to automatically inject
-        // the Organisation without needing an {organisation} path segment in the URL.
-        Route::bind('subdomain', function (string $value) {
+        // Resolve the {orgSlug} route parameter to an Organisation model by seo_name.
+        // This allows Route::prefix('{orgSlug}') to automatically inject the Organisation
+        // without needing a separate path-based lookup in each controller.
+        Route::bind('orgSlug', function (string $value) {
             return Organisation::where('seo_name', $value)
                 ->where('is_active', true)
                 ->firstOrFail();

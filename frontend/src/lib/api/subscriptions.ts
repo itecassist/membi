@@ -10,47 +10,47 @@ import type {
 } from '@/types/api';
 
 export const subscriptionsApi = {
-  list: (orgId: string) =>
-    api.get<{ data: Subscription[] }>(`/organisations/${orgId}/subscriptions`),
+  list: (orgSlug: string) =>
+    api.get<{ data: Subscription[] }>(`/${orgSlug}/subscriptions`),
 
-  stats: (orgId: string) =>
-    api.get<ApiResponse<SubscriptionStats>>(`/organisations/${orgId}/subscriptions/stats`),
+  stats: (orgSlug: string) =>
+    api.get<ApiResponse<SubscriptionStats>>(`/${orgSlug}/subscriptions/stats`),
 
-  get: (orgId: string, subId: string) =>
-    api.get<ApiResponse<Subscription>>(`/organisations/${orgId}/subscriptions/${subId}`),
+  get: (orgSlug: string, subId: string) =>
+    api.get<ApiResponse<Subscription>>(`/${orgSlug}/subscriptions/${subId}`),
 
-  create: (orgId: string, data: StoreSubscriptionPayload) =>
-    api.post<ApiResponse<Subscription>>(`/organisations/${orgId}/subscriptions`, data),
+  create: (orgSlug: string, data: StoreSubscriptionPayload) =>
+    api.post<ApiResponse<Subscription>>(`/${orgSlug}/subscriptions`, data),
 
-  update: (orgId: string, subId: string, data: Partial<StoreSubscriptionPayload>) =>
-    api.put<ApiResponse<Subscription>>(`/organisations/${orgId}/subscriptions/${subId}`, data),
+  update: (orgSlug: string, subId: string, data: Partial<StoreSubscriptionPayload>) =>
+    api.put<ApiResponse<Subscription>>(`/${orgSlug}/subscriptions/${subId}`, data),
 
-  delete: (orgId: string, subId: string) =>
-    api.delete(`/organisations/${orgId}/subscriptions/${subId}`),
+  delete: (orgSlug: string, subId: string) =>
+    api.delete(`/${orgSlug}/subscriptions/${subId}`),
 
   // Price options
-  priceOptions: (orgId: string, subId: string) =>
+  priceOptions: (orgSlug: string, subId: string) =>
     api.get<{ data: SubscriptionPriceOption[] }>(
-      `/organisations/${orgId}/subscriptions/${subId}/price-options`
+      `/${orgSlug}/subscriptions/${subId}/price-options`
     ),
 
-  addPriceOption: (orgId: string, subId: string, data: StoreSubscriptionPriceOptionPayload) =>
+  addPriceOption: (orgSlug: string, subId: string, data: StoreSubscriptionPriceOptionPayload) =>
     api.post<ApiResponse<SubscriptionPriceOption>>(
-      `/organisations/${orgId}/subscriptions/${subId}/price-options`,
+      `/${orgSlug}/subscriptions/${subId}/price-options`,
       data
     ),
 
   updatePriceOption: (
-    orgId: string,
+    orgSlug: string,
     subId: string,
     optionId: string,
     data: Partial<StoreSubscriptionPriceOptionPayload>
   ) =>
     api.put<ApiResponse<SubscriptionPriceOption>>(
-      `/organisations/${orgId}/subscriptions/${subId}/price-options/${optionId}`,
+      `/${orgSlug}/subscriptions/${subId}/price-options/${optionId}`,
       data
     ),
 
-  deletePriceOption: (orgId: string, subId: string, optionId: string) =>
-    api.delete(`/organisations/${orgId}/subscriptions/${subId}/price-options/${optionId}`),
+  deletePriceOption: (orgSlug: string, subId: string, optionId: string) =>
+    api.delete(`/${orgSlug}/subscriptions/${subId}/price-options/${optionId}`),
 };

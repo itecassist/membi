@@ -2,9 +2,9 @@ import api from '@/lib/api';
 import type { ApiResponse, PaginatedResponse, Order } from '@/types/api';
 
 export const ordersApi = {
-  list: (orgId: string, page = 1) =>
-    api.get<PaginatedResponse<Order>>(`/organisations/${orgId}/orders`, { params: { page } }),
+  list: (orgSlug: string, page = 1) =>
+    api.get<PaginatedResponse<Order>>(`/${orgSlug}/orders`, { params: { page } }),
 
-  get: (orgId: string, orderId: string) =>
-    api.get<ApiResponse<Order>>(`/organisations/${orgId}/orders/${orderId}`),
+  get: (orgSlug: string, orderId: string) =>
+    api.get<ApiResponse<Order>>(`/${orgSlug}/orders/${orderId}`),
 };

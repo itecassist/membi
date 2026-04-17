@@ -19,12 +19,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
-
-    'allowed_origins_patterns' => [
-        // Allow any subdomain of the app domain (e.g. myclub.localhost:3000)
-        '#^https?://[a-z0-9\-]+\.' . preg_quote(env('APP_DOMAIN', 'localhost'), '#') . '(:\d+)?$#',
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:3000'),
+        env('APP_URL', 'http://localhost'),
     ],
+
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
